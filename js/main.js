@@ -129,8 +129,8 @@ function initCalendarLink() {
 }
 
 /* ==========================================================================
-   MÓDULO 3: CONTROL DE AUDIO & MÚSICA DE FONDO
-   (Con Web Audio API Sintetizado como respaldo elegante si no hay archivo mp3)
+/* ==========================================================================
+   MÓDULO 3: CONTROL DE AUDIO & MÚSICA DE FONDO (EXCLUSIVAMENTE ARCHIVO REAL MP3)
    ========================================================================== */
 function initAudioPlayer() {
   const audio = document.getElementById('wedding-audio');
@@ -138,14 +138,11 @@ function initAudioPlayer() {
   const container = document.getElementById('audioContainer');
   const tooltip = document.getElementById('audioTooltip');
 
-  if (!toggleBtn || !container) return;
+  if (!audio || !toggleBtn || !container) return;
 
   let isPlaying = false;
-  let webAudioCtx = null;
-  let webAudioGain = null;
-  let proceduralInterval = null;
 
-  // Mostramos el tooltip de bienvenida durante unos segundos al inicio
+  // Tooltip de bienvenida
   if (tooltip) {
     setTimeout(() => {
       tooltip.classList.add('show-init');
@@ -153,114 +150,28 @@ function initAudioPlayer() {
     }, 1200);
   }
 
-  /**
-   * Generador de música procedural romántica suave (Harp/Piano)
-   * Si el navegador no encuentra o bloquea el archivo local music.mp3
-   */
-  function startProceduralRomanticMelody() {
-    try {
-      const AudioContext = window.AudioContext || window.webkitAudioContext;
-      if (!AudioContext) return;
-      if (!webAudioCtx) {
-        webAudioCtx = new AudioContext();
-        webAudioGain = webAudioCtx.createGain();
-        webAudioGain.gain.setValueAtTime(0.08, webAudioCtx.currentTime);
-        webAudioGain.connect(webAudioCtx.destination);
-      }
-
-      if (webAudioCtx.state === 'suspended') {
-        webAudioCtx.resume();
-      }
-
-      // Escala armónica elegante de acordes en Re mayor / Fa# menor / Sol mayor (Canon en Re)
-      const chords = [
-        [293.66, 369.99, 440.00, 587.33], // D mayor (D4, F#4, A4, D5)
-        [220.00, 277.18, 329.63, 440.00], // A mayor (A3, C#4, E4, A4)
-        [246.94, 293.66, 369.99, 493.88], // B menor (B3, D4, F#4, B4)
-        [185.00, 220.00, 277.18, 369.99], // F# menor (F#3, A3, C#4, F#4)
-        [196.00, 246.94, 293.66, 392.00], // G mayor (G3, B3, D4, G4)
-        [146.83, 220.00, 293.66, 440.00]  // D mayor (D3, A3, D4, A4)
-      ];
-
-      let chordIdx = 0;
-      let noteStep = 0;
-
-      function playHarpNote(freq, delay) {
-        if (!webAudioCtx || !isPlaying) return;
-        const osc = webAudioCtx.createOscillator();
-        const noteGain = webAudioCtx.createGain();
-
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(freq, webAudioCtx.currentTime + delay);
-
-        // Curva suave de campana / arpa
-        noteGain.gain.setValueAtTime(0, webAudioCtx.currentTime + delay);
-        noteGain.gain.linearRampToValueAtTime(0.12, webAudioCtx.currentTime + delay + 0.05);
-        noteGain.gain.exponentialRampToValueAtTime(0.0001, webAudioCtx.currentTime + delay + 1.8);
-
-        osc.connect(noteGain);
-        noteGain.connect(webAudioGain);
-
-        osc.start(webAudioCtx.currentTime + delay);
-        osc.stop(webAudioCtx.currentTime + delay + 1.9);
-      }
-
-      proceduralInterval = setInterval(() => {
-        if (!isPlaying) return;
-        const currentChord = chords[chordIdx];
-        const freq = currentChord[noteStep % currentChord.length];
-        playHarpNote(freq, 0);
-
-        noteStep++;
-        if (noteStep >= currentChord.length) {
-          noteStep = 0;
-          chordIdx = (chordIdx + 1) % chords.length;
-        }
-      }, 700);
-
-    } catch (e) {
-      console.warn('Procedural audio no disponible:', e);
-    }
-  }
-
-  function stopProceduralMelody() {
-    if (proceduralInterval) {
-      clearInterval(proceduralInterval);
-      proceduralInterval = null;
-    }
-  }
-
   function playMusic() {
-    isPlaying = true;
-    container.classList.add('playing');
-    if (tooltip) {
-      tooltip.querySelector('.tooltip-text').textContent = 'Pausar música';
-    }
-
-    if (audio) {
-      audio.volume = 0.55;
-      const playPromise = audio.play();
-      if (playPromise !== undefined) {
-        playPromise.catch((err) => {
-          console.warn('Audio local falló, activando melodía procedural de respaldo:', err);
-          startProceduralRomanticMelody();
-        });
-      }
-    } else {
-      startProceduralRomanticMelody();
-    }
+    audio.volume = 0.55;
+    audio.play()
+      .then(() => {
+        isPlaying = true;
+        container.classList.add('playing');
+        if (tooltip) {
+          tooltip.querySelector('.tooltip-text').textContent = 'Pausar música';
+        }
+      })
+      .catch(() => {
+        // En móviles, el navegador requiere un toque del usuario; esperamos silenciosamente
+      });
   }
 
   function pauseMusic() {
+    audio.pause();
     isPlaying = false;
     container.classList.remove('playing');
     if (tooltip) {
       tooltip.querySelector('.tooltip-text').textContent = 'Reproducir música';
     }
-    if (audio) {
-      audio.pause();
-    }
-    stopProceduralMelody();
   }
 
   toggleBtn.addEventListener('click', (e) => {
@@ -287,29 +198,21 @@ function initAudioPlayer() {
     }
 
     btnOpenInvitation.addEventListener('click', openEnvelope);
-    btnOpenInvitation.addEventListener('touchstart', openEnvelope, { passive: true });
+    btnOpenInvitation.addEventListener('touchend', openEnvelope, { passive: true });
   }
 
-  // Intentar reproducir inmediatamente al cargar
-  setTimeout(() => {
-    playMusic();
-  }, 300);
-
-  // Escuchar cualquier interacción adicional en la ventana si el navegador bloqueó el autoplay
-  const interactionEvents = ['click', 'touchstart', 'scroll', 'pointerdown'];
-  function handleFirstUserInteraction() {
+  // Si por alguna razón el sobre no activó la música, se activa con el primer toque en pantalla
+  const startOnFirstTouch = () => {
     if (!isPlaying) {
       playMusic();
     }
-    interactionEvents.forEach(evt => {
-      document.removeEventListener(evt, handleFirstUserInteraction);
-      window.removeEventListener(evt, handleFirstUserInteraction);
+    ['click', 'touchstart'].forEach(evt => {
+      document.removeEventListener(evt, startOnFirstTouch);
     });
-  }
+  };
 
-  interactionEvents.forEach(evt => {
-    document.addEventListener(evt, handleFirstUserInteraction, { once: true, passive: true });
-    window.addEventListener(evt, handleFirstUserInteraction, { once: true, passive: true });
+  ['click', 'touchstart'].forEach(evt => {
+    document.addEventListener(evt, startOnFirstTouch, { once: true, passive: true });
   });
 }
 
