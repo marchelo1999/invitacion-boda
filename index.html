@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <title>¡Nos Casamos! | Samuel & Jhosselin - 24 de Octubre de 2026</title>
+  <meta name="description"
+    content="Acompáñanos a celebrar nuestra boda. Samuel & Jhosselin. 24 de Octubre de 2026. Información del evento, ubicaciones, itinerario y confirmación de asistencia.">
+  <meta name="author" content="Samuel & Jhosselin">
+
+  <!-- Open Graph / Meta para compartir en WhatsApp y redes sociales -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="¡Nos Casamos! Samuel & Jhosselin">
+  <meta property="og:description"
+    content="Tenemos el honor de invitarte a nuestra boda. Conoce todos los detalles y confirma tu asistencia.">
+  <meta property="og:image" content="assets/images/couple.jpg">
+  <meta property="og:locale" content="es_ES">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23c5a059'><path d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/></svg>">
+
+  <!-- Google Fonts: Cormorant Garamond, Montserrat, Alex Brush para toque caligráfico -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap"
+    rel="stylesheet">
+
+  <!-- Estilos Principales -->
+  <link rel="stylesheet" href="css/styles.css?v=4">
+</head>
+
+<body>
+
+  <!-- Audio de fondo: Tom Rosenthal (Edith Whiskers) - Home (Instrumental) -->
+  <audio id="wedding-audio" loop preload="auto" src="assets/audio/music.mp3">
+    <source src="assets/audio/music.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- Pantalla de Entrada / Sobre de Bienvenida Nupcial (Garantiza música activa al 100%) -->
+  <div class="envelope-overlay" id="envelopeOverlay">
+    <div class="envelope-container">
+      <div class="envelope-monogram">
+        <span>S</span>
+        <span class="amp">&amp;</span>
+        <span>J</span>
+      </div>
+      <p class="envelope-subtitle">NUESTRA BODA</p>
+      <h2 class="envelope-names">Samuel &amp; Jhosselin</h2>
+      <p class="envelope-date">Sábado, 24 de Octubre de 2026</p>
+      <div class="envelope-divider">
+        <span class="line"></span>
+        <span class="diamond">◆</span>
+        <span class="line"></span>
+      </div>
+
+      <!-- Botón de Sello de Lacre Dorado -->
+      <button class="envelope-seal-btn" id="btnOpenInvitation" aria-label="Abrir invitación y escuchar música">
+        <div class="wax-seal">
+          <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+            <path
+              d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+          </svg>
+        </div>
+        <span class="seal-btn-text">ABRIR INVITACIÓN</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Barra de Progreso de Lectura Superior Dorada -->
+  <div class="scroll-progress-bar" id="scrollProgressBar" aria-hidden="true"></div>
+
+  <!-- Botón Flotante de Audio / Música -->
+  <div class="audio-floating-container" id="audioContainer">
+    <button class="audio-btn" id="audioToggleBtn" aria-label="Controlar música de fondo" title="Música de fondo">
+      <div class="sound-waves" id="soundWaves">
+        <span class="bar bar-1"></span>
+        <span class="bar bar-2"></span>
+        <span class="bar bar-3"></span>
+        <span class="bar bar-4"></span>
+      </div>
+      <!-- Icono elegante cuando está en pausa (Nota musical) -->
+      <svg class="audio-icon-paused" id="iconPaused" viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+        <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z" />
+      </svg>
+      <!-- Icono activo cuando está reproduciendo (Altavoz con ondas) -->
+      <svg class="audio-icon-playing" id="iconPlaying" viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+        <path
+          d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" />
+      </svg>
+    </button>
+    <div class="audio-tooltip" id="audioTooltip">
+      <span class="tooltip-text">♫ Música de fondo</span>
+    </div>
+  </div>
+
+  <!-- Contenedor Principal (Mobile-First Luxury Invitation) -->
+  <main class="invitation-wrapper">
+
+    <!-- Destellos Dorados Ambientales Flotantes -->
+    <div class="golden-sparkles-container" aria-hidden="true">
+      <span class="sparkle sparkle-1"></span>
+      <span class="sparkle sparkle-2"></span>
+      <span class="sparkle sparkle-3"></span>
+      <span class="sparkle sparkle-4"></span>
+      <span class="sparkle sparkle-5"></span>
+    </div>
+
+    <!-- SECCIÓN 1: HERO / PORTADA -->
+    <header class="section hero-section" id="hero">
+      <div class="hero-background" style="background-image: url('assets/images/hero-bg.jpg');"></div>
+      <div class="hero-overlay"></div>
+
+      <div class="hero-content reveal-on-scroll">
+        <div class="monogram-badge">
+          <span class="monogram-letter">S</span>
+          <span class="monogram-amp">&amp;</span>
+          <span class="monogram-letter">J</span>
+        </div>
+
+        <p class="hero-subtitle">¡Nos Casamos!</p>
+        <h1 class="hero-names">
+          <span class="name-first">Samuel</span>
+          <span class="name-separator">&amp;</span>
+          <span class="name-second">Jhosselin</span>
+        </h1>
+
+        <div class="ornament-divider">
+          <span class="line"></span>
+          <svg class="leaf-icon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+            <path
+              d="M17,8C8,10 5.9,16.17 3.82,21.34L5.71,22L6.66,19.7C7.14,19.87 7.64,20 8,20C19,20 22,3 22,3C21,5 14,5.25 9,6.25C4,7.25 2,11.5 2,13.5C2,15.5 3.75,17.25 3.75,17.25C7,8 17,8 17,8Z" />
+          </svg>
+          <span class="line"></span>
+        </div>
+
+        <div class="hero-date-badge">
+          <span class="date-day">SÁBADO</span>
+          <span class="date-number">24</span>
+          <span class="date-month">OCTUBRE 2026</span>
+        </div>
+
+        <blockquote class="hero-verse">
+          «La bendición que viene de la mano de Dios despertó un día el amor entre nosotros para unirnos y juntos
+          recorrer un solo camino. Es por ello que nos presentamos delante de Él y ponemos en sus manos nuestro
+          matrimonio.»
+        </blockquote>
+
+        <div class="scroll-indicator" id="scrollIndicator">
+          <span class="scroll-text">Desliza para continuar</span>
+          <div class="scroll-arrow">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M7 10l5 5 5-5" />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- SECCIÓN 2: CUENTA REGRESIVA -->
+    <section class="section countdown-section reveal-on-scroll" id="countdown-section">
+      <div class="ornament-top">
+        <svg viewBox="0 0 100 20" class="floral-svg">
+          <path d="M0,10 Q25,0 50,10 Q75,20 100,10" fill="none" stroke="var(--gold-primary)" stroke-width="1" />
+          <circle cx="50" cy="10" r="3" fill="var(--gold-primary)" />
+        </svg>
+      </div>
+
+      <span class="section-tag">EL GRAN DÍA</span>
+      <h2 class="section-title">Faltan Solo...</h2>
+      <p class="section-subtitle">Cada segundo nos acerca más a celebrar nuestro amor junto a ti</p>
+
+      <div class="countdown-grid" id="countdown">
+        <div class="countdown-card reveal-item" data-stagger="1">
+          <div class="card-inner">
+            <span class="countdown-val" id="days">00</span>
+            <span class="countdown-lbl">Días</span>
+          </div>
+        </div>
+        <div class="countdown-card reveal-item" data-stagger="2">
+          <div class="card-inner">
+            <span class="countdown-val" id="hours">00</span>
+            <span class="countdown-lbl">Horas</span>
+          </div>
+        </div>
+        <div class="countdown-card reveal-item" data-stagger="3">
+          <div class="card-inner">
+            <span class="countdown-val" id="minutes">00</span>
+            <span class="countdown-lbl">Minutos</span>
+          </div>
+        </div>
+        <div class="countdown-card reveal-item" data-stagger="4">
+          <div class="card-inner">
+            <span class="countdown-val" id="seconds">00</span>
+            <span class="countdown-lbl">Segundos</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Botón para agendar en Google Calendar / Descargar Recordatorio -->
+      <div class="calendar-action reveal-item" data-stagger="5">
+        <a href="#" class="btn-outline-gold" id="btnAddToCalendar" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+            <line x1="16" y1="2" x2="16" y2="6" />
+            <line x1="8" y1="2" x2="8" y2="6" />
+            <line x1="3" y1="10" x2="21" y2="10" />
+          </svg>
+          <span>Agendar en mi Calendario</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- SECCIÓN 3: NUESTRA BENDICIÓN & PADRES -->
+    <section class="section parents-section reveal-on-scroll" id="parents-section">
+      <div class="parents-card glass-panel has-shimmer">
+        <!-- Retrato Real de los Novios (Arco Nupcial Clásico) -->
+        <div class="couple-portrait-wrapper has-shimmer">
+          <div class="couple-portrait-inner">
+            <img src="assets/images/samu_jhos.jpg" alt="Samuel &amp; Jhosselin" class="couple-portrait-img" loading="lazy">
+          </div>
+          <div class="couple-portrait-border"></div>
+        </div>
+
+        <h3 class="parents-intro reveal-item" data-stagger="1">Con la bendición de Dios</h3>
+        <p class="parents-lead reveal-item" data-stagger="2">Y con el amor incondicional de nuestros queridos padres:</p>
+
+        <div class="parents-grid">
+          <div class="parents-col reveal-item" data-stagger="3">
+            <span class="parents-role">Madre del Novio</span>
+            <p class="parents-name">Hilda Romero Velásquez</p>
+          </div>
+          <div class="parents-separator-ornament reveal-item" data-stagger="3">
+            <span class="ampersand-sign">&amp;</span>
+          </div>
+          <div class="parents-col reveal-item" data-stagger="4">
+            <span class="parents-role">Padres de la Novia</span>
+            <p class="parents-name">Constancio Martínez Ancasi</p>
+            <p class="parents-name">Humbertina Zurita Claros</p>
+          </div>
+        </div>
+
+        <p class="parents-closing reveal-item" data-stagger="5">
+          Queremos que estés presente en este día que tanto soñamos. Los esperamos con alegría para celebrar juntos el
+          inicio de este hermoso capítulo.
+        </p>
+      </div>
+    </section>
+
+    <!-- SECCIÓN 4: EVENTO E ITINERARIO -->
+    <section class="section events-section reveal-on-scroll" id="locations-section">
+      <span class="section-tag">DÓNDE &amp; CUÁNDO</span>
+      <h2 class="section-title">El Evento</h2>
+      <p class="section-subtitle">Acompáñanos en los momentos más importantes de nuestra unión</p>
+
+      <div class="event-cards-container">
+
+        <!-- Tarjeta: Ceremonia Religiosa -->
+        <article class="event-card glass-panel has-shimmer reveal-item" data-stagger="1">
+          <div class="event-icon-circle">
+            <!-- Icono de Iglesia / Catedral -->
+            <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+              <path
+                d="M12 2l-1 2H9v2H7v4H3v12h18V10h-4V6h-2V4h-2l-1-2zm0 3.5l.5 1h1.5v2h2v4h2v9h-3v-4c0-.55-.45-1-1-1s-1 .45-1 1v4H6v-9h2V8.5h2v-2h1.5l.5-1zM11 12h2v2h-2v-2z" />
+            </svg>
+          </div>
+          <span class="event-tag">CEREMONIA RELIGIOSA</span>
+          <h3 class="event-name">Parroquia “La Recoleta”</h3>
+
+          <div class="event-details">
+            <div class="detail-item">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+              </svg>
+              <span>17:00 hrs (5:00 PM)</span>
+            </div>
+            <div class="detail-item">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                <circle cx="12" cy="10" r="3" />
+              </svg>
+              <span>Av. Potosí, La Recoleta</span>
+            </div>
+          </div>
+
+          <a href="https://maps.google.com/?q=Parroquia+Santa+Ana+de+Cala+Cala+La+Recoleta+Cochabamba" target="_blank"
+            rel="noopener noreferrer" class="btn-gold" id="btnMapCeremony">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+              <path
+                d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+            </svg>
+            <span>Ver Ubicación</span>
+          </a>
+        </article>
+
+        <!-- Tarjeta: Recepción y Fiesta -->
+        <article class="event-card glass-panel has-shimmer reveal-item" data-stagger="2">
+          <div class="event-icon-circle">
+            <!-- Icono de Brindis / Copas -->
+            <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+              <path
+                d="M11 20H6v2h12v-2h-5v-5.26c3.27-.45 5.84-3.12 5.99-6.42L19 3H5l.01 5.32c.15 3.3 2.72 5.97 5.99 6.42V20zm-4-15h10l-.01 3.25c-.13 2.62-2.26 4.75-4.99 4.75s-4.86-2.13-4.99-4.75L7 5z" />
+            </svg>
+          </div>
+          <span class="event-tag">RECEPCIÓN &amp; FIESTA</span>
+          <h3 class="event-name">“Salón de Eventos Deysi”</h3>
+
+          <div class="event-details">
+            <div class="detail-item">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+              </svg>
+              <span>18:00 hrs (6:00 PM)</span>
+            </div>
+            <div class="detail-item">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                <circle cx="12" cy="10" r="3" />
+              </svg>
+              <span>Av. Villazón Km. 4</span>
+            </div>
+          </div>
+
+          <a href="https://maps.google.com/?q=Salon+de+eventos+Deysi+Av+Villazon+km+4" target="_blank"
+            rel="noopener noreferrer" class="btn-gold" id="btnMapParty">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+              <path
+                d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+            </svg>
+            <span>Ver Ubicación</span>
+          </a>
+        </article>
+
+      </div>
+
+      <!-- ITINERARIO DEL DÍA (Línea de tiempo) -->
+      <div class="itinerary-wrapper glass-panel reveal-on-scroll has-shimmer">
+        <h3 class="itinerary-title">Itinerario del Evento</h3>
+        <p class="itinerary-subtitle">Así celebraremos este día tan especial</p>
+
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-time">17:00 hrs</div>
+            <div class="timeline-content">
+              <h4>Ceremonia Religiosa</h4>
+              <p>Bendición sagrada y votos matrimoniales en la Parroquia.</p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-time">18:00 hrs</div>
+            <div class="timeline-content">
+              <h4>Recepción &amp; Brindis</h4>
+              <p>Bienvenida a los invitados y brindis de honor por los novios.</p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-time">19:30 hrs</div>
+            <div class="timeline-content">
+              <h4>El Primer Vals</h4>
+              <p>Baile nupcial con nuestros seres queridos y cortejo.</p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-time">20:30 hrs</div>
+            <div class="timeline-content">
+              <h4>Cena de Gala</h4>
+              <p>Compartiremos una cena exquisita en honor a los recién casados.</p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-time">22:00 hrs</div>
+            <div class="timeline-content">
+              <h4>Fiesta &amp; Baile</h4>
+              <p>¡Música, alegría y diversión hasta el amanecer!</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="celebration-days-notice">
+          <div class="notice-badge">24, 25 y 26 de Octubre</div>
+          <p class="notice-text">
+            Los dos primeros días nos acompañaremos en la recepción y el último día continuaremos compartiendo en
+            domicilio particular.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN 5: CÓDIGO DE VESTIMENTA (DRESS CODE) -->
+    <section class="section dresscode-section reveal-on-scroll" id="dresscode-section">
+      <span class="section-tag">ETIQUETA</span>
+      <h2 class="section-title">Código de Vestimenta</h2>
+
+      <div class="dresscode-card glass-panel">
+        <div class="dresscode-icons">
+          <!-- Icono Traje / Smoking -->
+          <div class="dress-icon-box" title="Caballeros: Traje formal">
+            <svg viewBox="0 0 24 24" width="40" height="40" fill="currentColor">
+              <path d="M6 2l6 4 6-4v20H6V2zm3 2.5L12 6l3-1.5V18l-3-2-3 2V4.5zM11 9h2v2h-2V9zm0 3h2v2h-2v-2z" />
+            </svg>
+            <span class="icon-label">Caballeros</span>
+            <small>Traje Formal / Corbata</small>
+          </div>
+          <!-- Icono Vestido -->
+          <div class="dress-icon-box" title="Damas: Vestido elegante">
+            <svg viewBox="0 0 24 24" width="40" height="40" fill="currentColor">
+              <path
+                d="M12 2c1.1 0 2 .9 2 2 0 .74-.4 1.38-1 1.72V7l4 3-2 12H9L7 10l4-3V5.72c-.6-.34-1-.98-1-1.72 0-1.1.9-2 2-2z" />
+            </svg>
+            <span class="icon-label">Damas</span>
+            <small>Vestido Elegante de Fiesta</small>
+          </div>
+        </div>
+
+        <div class="dresscode-title-badge">FORMAL / ELEGANTE</div>
+
+        <!-- Indicación clave de colores reservados -->
+        <div class="reserved-colors-box">
+          <div class="warning-ring">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+          </div>
+          <p class="reserved-text">
+            <strong>Colores Reservados:</strong> El <span class="reserved-highlight highlight-white">Blanco (Novia)</span> y el <span
+              class="reserved-highlight highlight-blue">Celeste (Novio)</span> están reservados exclusivamente para los novios. ¡Nos encantará
+            verte lucir otros colores!
+          </p>
+        </div>
+
+        <!-- Paleta sugerida de tonos tierra / elegantes con interactividad -->
+        <div class="palette-wrapper">
+          <p class="palette-intro">Colores sugeridos para inspirar tu atuendo (toca cada círculo):</p>
+          <div class="color-swatches" id="colorSwatches">
+            <button class="color-swatch" style="--c: #C5A059;" data-color="Dorado / Champagne"
+              data-tip="Toque sofisticado y festivo" aria-label="Dorado"></button>
+            <button class="color-swatch" style="--c: #B85D43;" data-color="Terracota Cálido"
+              data-tip="Tono tierra muy favorecedor" aria-label="Terracota"></button>
+            <button class="color-swatch" style="--c: #2D5A46;" data-color="Verde Esmeralda"
+              data-tip="Sobrio, elegante y natural" aria-label="Verde Esmeralda"></button>
+            <button class="color-swatch" style="--c: #6B2D38;" data-color="Marsala / Vino"
+              data-tip="Elegancia atemporal nocturna" aria-label="Vino Tinto"></button>
+            <button class="color-swatch" style="--c: #D8B4A0;" data-color="Nude / Beige Cálido"
+              data-tip="Delicado y armónico" aria-label="Nude"></button>
+            <button class="color-swatch" style="--c: #1B2A4A;" data-color="Azul Marino Profundo"
+              data-tip="Clásico y muy distinguido" aria-label="Azul Marino"></button>
+          </div>
+          <div class="swatch-feedback" id="swatchFeedback">
+            <span class="feedback-color" id="feedbackColor">Selecciona un color</span>
+            <span class="feedback-tip" id="feedbackTip">para ver la recomendación</span>
+          </div>
+
+          <!-- Muestra de colores que NO se deben usar -->
+          <div class="forbidden-colors">
+            <span class="forbidden-label">Colores Exclusivos de los Novios (Por favor evitar):</span>
+            <div class="forbidden-swatches">
+              <div class="forbidden-item" title="Blanco reservado para la novia Jhosselin">
+                <span class="swatch-circle white-swatch"></span>
+                <span class="swatch-x">&times;</span>
+                <span class="swatch-name">Blanco (Novia)</span>
+              </div>
+              <div class="forbidden-item" title="Celeste reservado para el novio Samuel">
+                <span class="swatch-circle lightblue-swatch"></span>
+                <span class="swatch-x">&times;</span>
+                <span class="swatch-name">Celeste (Novio)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SECCIÓN 6: MESA DE REGALOS / DATOS BANCARIOS -->
+    <section class="section gifts-section reveal-on-scroll" id="gifts-section">
+      <span class="section-tag">PRESENTES</span>
+      <h2 class="section-title">Mesa de Regalos</h2>
+
+      <div class="gifts-card glass-panel has-shimmer">
+        <div class="gift-icon-container">
+          <!-- Icono de Caja de Regalo con lazo -->
+          <svg viewBox="0 0 24 24" width="36" height="36" fill="currentColor">
+            <path
+              d="M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.05 0-1.96.54-2.5 1.35l-.5.65-.5-.65C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-5-2c.55 0 1 .45 1 1s-.45 1-1 1h-2V5c0-.55.45-1 1-1zM9 4c.55 0 1 .45 1 1v1H8c-.55 0-1-.45-1-1s.45-1 1-1zm11 15H4v-2h16v2zm0-5H4V8h5.08L7 10.83 8.62 12 11 8.76V14h2V8.76L15.38 12 17 10.83 14.92 8H20v6z" />
+          </svg>
+        </div>
+
+        <p class="gifts-message">
+          «Nuestro mejor regalo es tu presencia y tus bendiciones en este gran día.»
+        </p>
+      </div>
+    </section>
+
+    <!-- SECCIÓN 7: CONFIRMACIÓN DE ASISTENCIA (RSVP) -->
+    <section class="section rsvp-section reveal-on-scroll" id="rsvp-section">
+      <span class="section-tag">CONFIRMACIÓN</span>
+      <h2 class="section-title">Confirma tu Asistencia</h2>
+      <p class="section-subtitle">Por favor, confírmanos antes del <strong>10 de Octubre de 2026</strong> para reservar
+        tu lugar en este día inolvidable.</p>
+
+      <div class="rsvp-card glass-panel has-shimmer">
+        <form class="rsvp-form" id="rsvpForm" novalidate>
+
+          <!-- Campo: Nombre Completo -->
+          <div class="form-group">
+            <label for="guestName" class="form-label">Nombre y Apellido *</label>
+            <div class="input-wrapper">
+              <svg class="input-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+              </svg>
+              <input type="text" id="guestName" name="guestName" class="form-input" placeholder="Ej. Carlos Mendoza"
+                required autocomplete="name">
+            </div>
+            <span class="form-error" id="nameError">Por favor, escribe tu nombre completo.</span>
+          </div>
+
+          <!-- Campo: ¿Asistirás? (Radio buttons estilizados) -->
+          <div class="form-group">
+            <label class="form-label">¿Podrás acompañarnos? *</label>
+            <div class="radio-cards-group">
+              <label class="radio-card">
+                <input type="radio" name="attendance" value="si" checked>
+                <div class="radio-content">
+                  <span class="radio-indicator"></span>
+                  <div class="radio-text">
+                    <strong>¡Sí, con mucho gusto!</strong>
+                    <small>Ahí estaré celebrando con ustedes</small>
+                  </div>
+                </div>
+              </label>
+
+              <label class="radio-card">
+                <input type="radio" name="attendance" value="no">
+                <div class="radio-content">
+                  <span class="radio-indicator"></span>
+                  <div class="radio-text">
+                    <strong>Lo siento, no podré asistir</strong>
+                    <small>Estaré presente en corazón</small>
+                  </div>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- Campo: Número de Pases / Acompañantes -->
+          <div class="form-group" id="groupPasses">
+            <label for="guestPasses" class="form-label">Número de Pases / Asistentes *</label>
+            <div class="input-wrapper">
+              <svg class="input-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                stroke-width="2">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+              </svg>
+              <select id="guestPasses" name="guestPasses" class="form-input form-select">
+                <option value="1">1 Persona (Pase individual)</option>
+                <option value="2" selected>2 Personas (Pareja)</option>
+                <option value="3">3 Personas</option>
+                <option value="4">4 Personas (Familia)</option>
+                <option value="5">5 Personas o más</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Campo: Mensaje / Felicitación -->
+          <div class="form-group">
+            <label for="guestMessage" class="form-label">Mensaje para los novios (Opcional)</label>
+            <div class="input-wrapper">
+              <textarea id="guestMessage" name="guestMessage" class="form-input form-textarea" rows="3"
+                placeholder="Escríbenos una dedicatoria o especifica si tienes alguna restricción dietética..."></textarea>
+            </div>
+          </div>
+
+          <!-- Botón de Envío Directo Web -->
+          <button type="submit" class="btn-gold btn-submit-rsvp" id="btnSubmitRSVP">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" class="btn-icon">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+              <polyline points="22 4 12 14.01 9 11.01" />
+            </svg>
+            <span class="btn-text" id="btnSubmitText">Confirmar Asistencia</span>
+            <span class="btn-spinner" id="btnSubmitSpinner" style="display: none;"></span>
+          </button>
+        </form>
+
+        <!-- Tarjeta de Confirmación Exitosa (Nativa en la web) -->
+        <div class="rsvp-success-card" id="rsvpSuccessCard" style="display: none;">
+          <div class="success-icon-badge">
+            <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="2.2">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+              <polyline points="22 4 12 14.01 9 11.01" />
+            </svg>
+          </div>
+          <h3 class="success-title" id="successTitle">¡Confirmación Registrada!</h3>
+          <p class="success-desc" id="successDesc">
+            Tu respuesta ha sido guardada en la lista oficial de los novios.
+          </p>
+
+          <div class="success-actions">
+            <!-- Opción para modificar o corregir la confirmación -->
+            <button type="button" class="btn-text-modify" id="btnModifyRSVP">
+              Editar o cambiar mi respuesta
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER / AGRADECIMIENTO -->
+    <footer class="section footer-section reveal-on-scroll">
+      <div class="footer-ornament">
+        <svg viewBox="0 0 120 20" width="120" height="20" fill="none">
+          <path d="M0,10 Q30,0 60,10 Q90,20 120,10" stroke="var(--gold-primary)" stroke-width="1.2" />
+          <circle cx="60" cy="10" r="3.5" fill="var(--gold-primary)" />
+        </svg>
+      </div>
+
+      <h3 class="footer-thanks">¡Gracias por Acompañarnos!</h3>
+      <p class="footer-text">
+        Tu presencia es la bendición más grande para comenzar esta nueva etapa juntos.
+      </p>
+
+      <div class="footer-couple-signature">
+        Samuel &amp; Jhosselin
+      </div>
+      <p class="footer-year">24 . 10 . 2026 &bull; Cochabamba, Bolivia</p>
+
+      <div class="back-to-top">
+        <button class="btn-top" id="btnBackToTop" aria-label="Volver al inicio">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="18 15 12 9 6 15" />
+          </svg>
+          <span>Inicio</span>
+        </button>
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- Notificación Toast Flotante para Copiado y Feedback -->
+  <div class="toast-notification" id="toastNotification" role="alert" aria-live="polite">
+    <div class="toast-icon">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="20 6 9 17 4 12" />
+      </svg>
+    </div>
+    <span class="toast-message" id="toastMessage">¡Copiado con éxito!</span>
+  </div>
+
+  <!-- JavaScript Modular -->
+  <script src="js/main.js?v=4" charset="UTF-8"></script>
+</body>
+
+</html>
