@@ -13,11 +13,25 @@
 
   <!-- Open Graph / Meta para compartir en WhatsApp y redes sociales -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="¡Nos Casamos! Samuel & Jhosselin">
+  <meta property="og:url" content="https://marchelo1999.github.io/invitacion-boda/">
+  <meta property="og:title" content="¡Nos Casamos! Samuel &amp; Jhosselin — 24 de Octubre de 2026">
   <meta property="og:description"
-    content="Tenemos el honor de invitarte a nuestra boda. Conoce todos los detalles y confirma tu asistencia.">
-  <meta property="og:image" content="assets/images/couple.jpg">
+    content="Tenemos el honor de invitarte a nuestra boda. Conoce los detalles de la ceremonia, recepción, itinerario y confirma tu asistencia.">
+  <meta property="og:image" content="https://marchelo1999.github.io/invitacion-boda/assets/images/og-boda.jpg">
+  <meta property="og:image:secure_url" content="https://marchelo1999.github.io/invitacion-boda/assets/images/og-boda.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Boda de Samuel &amp; Jhosselin">
   <meta property="og:locale" content="es_ES">
+  <meta property="og:site_name" content="Boda Samuel &amp; Jhosselin">
+
+  <!-- Twitter / WhatsApp Rich Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="¡Nos Casamos! Samuel &amp; Jhosselin">
+  <meta name="twitter:description"
+    content="Tenemos el honor de invitarte a nuestra boda. Conoce los detalles y confirma tu asistencia.">
+  <meta name="twitter:image" content="https://marchelo1999.github.io/invitacion-boda/assets/images/og-boda.jpg">
 
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml"
@@ -31,19 +45,21 @@
     rel="stylesheet">
 
   <!-- Estilos Principales -->
-  <link rel="stylesheet" href="css/styles.css?v=4">
+  <link rel="stylesheet" href="css/styles.css?v=13">
 </head>
 
 <body>
 
-  <!-- Audio de fondo: Tom Rosenthal (Edith Whiskers) - Home (Instrumental) -->
-  <audio id="wedding-audio" loop preload="auto" src="assets/audio/music.mp3">
-    <source src="assets/audio/music.mp3" type="audio/mpeg">
+  <!-- Audio de fondo: Elvis Presley - Can't Help Falling In Love -->
+  <audio id="wedding-audio" loop preload="auto" src="assets/audio/music.mp3?v=2">
+    <source src="assets/audio/music.mp3?v=2" type="audio/mpeg">
   </audio>
 
   <!-- Pantalla de Entrada / Sobre de Bienvenida Nupcial (Garantiza música activa al 100%) -->
   <div class="envelope-overlay" id="envelopeOverlay">
     <div class="envelope-container">
+      <img src="assets/images/floral-corner.webp" class="envelope-flower flower-top-left" alt="" aria-hidden="true">
+      <img src="assets/images/floral-corner.webp" class="envelope-flower flower-bottom-right" alt="" aria-hidden="true">
       <div class="envelope-monogram">
         <span>S</span>
         <span class="amp">&amp;</span>
@@ -172,7 +188,6 @@
 
       <span class="section-tag">EL GRAN DÍA</span>
       <h2 class="section-title">Faltan Solo...</h2>
-      <p class="section-subtitle">Cada segundo nos acerca más a celebrar nuestro amor junto a ti</p>
 
       <div class="countdown-grid" id="countdown">
         <div class="countdown-card reveal-item" data-stagger="1">
@@ -200,6 +215,7 @@
           </div>
         </div>
       </div>
+      <p class="section-subtitle">Cada segundo nos acerca más a celebrar nuestro amor junto a ti</p>
 
       <!-- Botón para agendar en Google Calendar / Descargar Recordatorio -->
       <div class="calendar-action reveal-item" data-stagger="5">
@@ -218,16 +234,19 @@
     <!-- SECCIÓN 3: NUESTRA BENDICIÓN & PADRES -->
     <section class="section parents-section reveal-on-scroll" id="parents-section">
       <div class="parents-card glass-panel has-shimmer">
+        <img src="assets/images/floral-corner-tr.webp" class="card-flower-tr" alt="" aria-hidden="true">
         <!-- Retrato Real de los Novios (Arco Nupcial Clásico) -->
         <div class="couple-portrait-wrapper has-shimmer">
           <div class="couple-portrait-inner">
-            <img src="assets/images/samu_jhos.jpg" alt="Samuel &amp; Jhosselin" class="couple-portrait-img" loading="lazy">
+            <img src="assets/images/samu_jhos.jpg" alt="Samuel &amp; Jhosselin" class="couple-portrait-img"
+              loading="lazy">
           </div>
           <div class="couple-portrait-border"></div>
         </div>
 
         <h3 class="parents-intro reveal-item" data-stagger="1">Con la bendición de Dios</h3>
-        <p class="parents-lead reveal-item" data-stagger="2">Y con el amor incondicional de nuestros queridos padres:</p>
+        <p class="parents-lead reveal-item" data-stagger="2">Y con el amor incondicional de nuestros queridos padres:
+        </p>
 
         <div class="parents-grid">
           <div class="parents-col reveal-item" data-stagger="3">
@@ -259,8 +278,9 @@
 
       <div class="event-cards-container">
 
-        <!-- Tarjeta: Ceremonia Religiosa -->
+        <!-- Tarjeta: Ceremonia Religiosa (Carta 2: Inferior Izquierda) -->
         <article class="event-card glass-panel has-shimmer reveal-item" data-stagger="1">
+          <img src="assets/images/floral-corner-bl.webp" class="card-flower-bl" alt="" aria-hidden="true">
           <div class="event-icon-circle">
             <!-- Icono de Iglesia / Catedral -->
             <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
@@ -300,6 +320,7 @@
 
         <!-- Tarjeta: Recepción y Fiesta -->
         <article class="event-card glass-panel has-shimmer reveal-item" data-stagger="2">
+          <img src="assets/images/floral-corner-tr.webp" class="card-flower-tr" alt="" aria-hidden="true">
           <div class="event-icon-circle">
             <!-- Icono de Brindis / Copas -->
             <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
@@ -339,8 +360,9 @@
 
       </div>
 
-      <!-- ITINERARIO DEL DÍA (Línea de tiempo) -->
+      <!-- ITINERARIO DEL DÍA (Carta 4: Inferior Izquierda) -->
       <div class="itinerary-wrapper glass-panel reveal-on-scroll has-shimmer">
+        <img src="assets/images/floral-corner-bl.webp" class="card-flower-bl" alt="" aria-hidden="true">
         <h3 class="itinerary-title">Itinerario del Evento</h3>
         <p class="itinerary-subtitle">Así celebraremos este día tan especial</p>
 
@@ -392,10 +414,9 @@
         </div>
 
         <div class="celebration-days-notice">
-          <div class="notice-badge">24, 25 y 26 de Octubre</div>
+          <div class="notice-badge">24 y 25 de Octubre</div>
           <p class="notice-text">
-            Los dos primeros días nos acompañaremos en la recepción y el último día continuaremos compartiendo en
-            domicilio particular.
+            Nos acompañaremos ambos días (24 y 25 de Octubre) en la recepción para celebrar juntos este momento tan especial.
           </p>
         </div>
       </div>
@@ -407,6 +428,7 @@
       <h2 class="section-title">Código de Vestimenta</h2>
 
       <div class="dresscode-card glass-panel">
+        <img src="assets/images/floral-corner-tr.webp" class="card-flower-tr" alt="" aria-hidden="true">
         <div class="dresscode-icons">
           <!-- Icono Traje / Smoking -->
           <div class="dress-icon-box" title="Caballeros: Traje formal">
@@ -439,8 +461,9 @@
             </svg>
           </div>
           <p class="reserved-text">
-            <strong>Colores Reservados:</strong> El <span class="reserved-highlight highlight-white">Blanco (Novia)</span> y el <span
-              class="reserved-highlight highlight-blue">Celeste (Novio)</span> están reservados exclusivamente para los novios. ¡Nos encantará
+            <strong>Colores Reservados:</strong> El <span class="reserved-highlight highlight-white">Blanco
+              (Novia)</span> y el <span class="reserved-highlight highlight-blue">Celeste (Novio)</span> están
+            reservados exclusivamente para los novios. ¡Nos encantará
             verte lucir otros colores!
           </p>
         </div>
@@ -494,6 +517,7 @@
       <h2 class="section-title">Mesa de Regalos</h2>
 
       <div class="gifts-card glass-panel has-shimmer">
+        <img src="assets/images/floral-corner-bl.webp" class="card-flower-bl" alt="" aria-hidden="true">
         <div class="gift-icon-container">
           <!-- Icono de Caja de Regalo con lazo -->
           <svg viewBox="0 0 24 24" width="36" height="36" fill="currentColor">
@@ -516,6 +540,7 @@
         tu lugar en este día inolvidable.</p>
 
       <div class="rsvp-card glass-panel has-shimmer">
+        <img src="assets/images/floral-corner-tr.webp" class="card-flower-tr" alt="" aria-hidden="true">
         <form class="rsvp-form" id="rsvpForm" novalidate>
 
           <!-- Campo: Nombre Completo -->
@@ -593,7 +618,8 @@
 
           <!-- Botón de Envío Directo Web -->
           <button type="submit" class="btn-gold btn-submit-rsvp" id="btnSubmitRSVP">
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" class="btn-icon">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2"
+              class="btn-icon">
               <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
               <polyline points="22 4 12 14.01 9 11.01" />
             </svg>

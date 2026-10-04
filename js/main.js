@@ -25,7 +25,7 @@ const CONFIG = {
   // Fecha y hora del evento principal (Formato ISO: AAAA-MM-DDTHH:mm:ss)
   // 24 de Octubre de 2026 a las 17:00 hrs
   weddingDate: '2026-10-24T17:00:00',
-  weddingEndDate: '2026-10-26T23:59:59',
+  weddingEndDate: '2026-10-25T23:59:59',
 
   // Número de WhatsApp para felicitaciones personales opcionales
   whatsappNumber: '59164388424',
@@ -311,7 +311,7 @@ function initRSVPForm() {
       const data = JSON.parse(savedRSVP);
       displaySuccessState(data);
     }
-  } catch (e) {}
+  } catch (e) { }
 
   // Ocultar selector de pases si la persona indica que NO podrá asistir
   const attendanceRadios = form.querySelectorAll('input[name="attendance"]');
@@ -379,7 +379,7 @@ function initRSVPForm() {
     // 1. Guardar en localStorage inmediatamente
     try {
       localStorage.setItem('samuel_jhosselin_rsvp', JSON.stringify(payload));
-    } catch (err) {}
+    } catch (err) { }
 
     // 2. Enviar a la API local (/api/rsvp) si está disponible
     try {
