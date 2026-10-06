@@ -176,7 +176,7 @@ h4 {
   transition: var(--transition-smooth);
 }
 
-.glass-panel > *:not(.card-flower-tr):not(.card-flower-bl):not(.shimmer-effect) {
+.glass-panel>*:not(.card-flower-tr):not(.card-flower-bl):not(.shimmer-effect) {
   position: relative;
   z-index: 2;
 }
@@ -212,6 +212,7 @@ h4 {
 }
 
 @media (min-width: 768px) {
+
   .card-flower-tr,
   .card-flower-bl {
     width: 105px;
@@ -356,8 +357,110 @@ h4 {
 
 .envelope-overlay.opened {
   opacity: 0;
-  transform: scale(1.06);
   pointer-events: none;
+  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.55s, backdrop-filter 0.8s ease 0.55s;
+}
+
+.envelope-overlay.opened .envelope-container {
+  animation: envelopeCinematicOpen 1.35s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  pointer-events: none;
+}
+
+.envelope-overlay.opened .wax-seal {
+  animation: waxSealBurst 0.65s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+.envelope-overlay.opened .seal-btn-text {
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.envelope-overlay.opened .envelope-flower.flower-top-left {
+  transform: translate(-15px, -15px) rotate(-6deg);
+  opacity: 0;
+  transition: transform 1.1s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.9s ease 0.2s;
+}
+
+.envelope-overlay.opened .envelope-flower.flower-bottom-right {
+  transform: rotate(180deg) translate(-15px, -15px) rotate(6deg);
+  opacity: 0;
+  transition: transform 1.1s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.9s ease 0.2s;
+}
+
+@keyframes envelopeCinematicOpen {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+    filter: blur(0px);
+  }
+
+  30% {
+    transform: translateY(-18px) scale(1.035);
+    opacity: 1;
+    box-shadow: 0 35px 85px rgba(26, 50, 76, 0.22), 0 0 45px rgba(197, 160, 89, 0.35);
+    filter: blur(0px);
+  }
+
+  70% {
+    transform: translateY(-28px) scale(1.07);
+    opacity: 0.85;
+    filter: blur(1px);
+  }
+
+  100% {
+    transform: translateY(-45px) scale(1.16);
+    opacity: 0;
+    filter: blur(8px);
+  }
+}
+
+@keyframes waxSealBurst {
+  0% {
+    transform: scale(1);
+  }
+
+  25% {
+    transform: scale(0.92);
+    box-shadow: 0 0 35px rgba(197, 160, 89, 0.95);
+  }
+
+  60% {
+    transform: scale(1.25) rotate(-6deg);
+    box-shadow: 0 0 60px rgba(255, 255, 255, 1), 0 0 90px rgba(197, 160, 89, 0.9);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(0.6) translateY(20px);
+    opacity: 0;
+  }
+}
+
+/* Transición de entrada suave para la invitación principal */
+.invitation-wrapper {
+  transition: transform 1.1s cubic-bezier(0.16, 1, 0.3, 1), filter 1.1s ease;
+}
+
+.envelope-overlay.opened~.invitation-wrapper {
+  animation: heroCinematicReveal 1.35s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes heroCinematicReveal {
+  0% {
+    transform: scale(0.955);
+    filter: blur(5px);
+  }
+
+  40% {
+    transform: scale(0.975);
+    filter: blur(3px);
+  }
+
+  100% {
+    transform: scale(1);
+    filter: blur(0px);
+  }
 }
 
 .envelope-container {
@@ -955,6 +1058,242 @@ h4 {
 }
 
 /* --------------------------------------------------------------------------
+   CALENDARIO SAVE THE DATE (OCTUBRE 2026)
+   -------------------------------------------------------------------------- */
+.wedding-calendar-card {
+  max-width: 380px;
+  margin: 1.5rem auto 1.8rem auto;
+  padding: 1.6rem 1.2rem 1.3rem 1.2rem;
+  background: var(--bg-card);
+  border: 1px solid var(--gold-border);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 10px 30px rgba(26, 50, 76, 0.08), 0 0 20px rgba(197, 160, 89, 0.12);
+  text-align: center;
+  position: relative;
+  overflow: visible;
+}
+
+.cal-header {
+  margin-bottom: 1.1rem;
+}
+
+.cal-month {
+  display: block;
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--gold-dark);
+}
+
+.cal-couples {
+  display: block;
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+}
+
+.cal-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  margin-bottom: 0.6rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--blue-border);
+}
+
+.cal-weekdays .weekend {
+  color: var(--gold-primary);
+}
+
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+  margin-bottom: 1.1rem;
+}
+
+.cal-day {
+  position: relative;
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  border-radius: 50%;
+  transition: var(--transition-fast);
+}
+
+.cal-day.weekend {
+  font-weight: 600;
+  color: var(--blue-deep);
+}
+
+.cal-day.cal-empty {
+  pointer-events: none;
+}
+
+/* Día de la Boda (24 de Octubre) - Anillo Fino de Oro Noble & Fondo Blanco Puro */
+.cal-day.wedding-day {
+  background: #FFFFFF;
+  color: var(--blue-deep);
+  font-weight: 700;
+  border: 2px solid var(--gold-primary);
+  border-radius: 50%;
+  box-shadow: 0 3px 12px rgba(197, 160, 89, 0.25);
+  z-index: 2;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  animation: weddingRingPulse 2.4s ease-in-out infinite;
+  overflow: visible;
+}
+
+.cal-day.wedding-day .day-num {
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: var(--blue-deep);
+  line-height: 1;
+  margin: 0 0 2px 0;
+  padding: 0;
+  display: block;
+  user-select: none;
+  pointer-events: none;
+  /* Anclaje GPU estricto: el número 24 se mantiene 100% inmóvil */
+  transform: translateZ(0);
+  -webkit-font-smoothing: antialiased;
+  backface-visibility: hidden;
+}
+
+.cal-day.wedding-day .heart-marker {
+  display: block;
+  width: 11px;
+  height: 11px;
+  color: var(--gold-primary);
+  transform-origin: center center;
+  transform-box: fill-box;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  will-change: transform, opacity;
+  animation: weddingHeartBreathe 2.4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes weddingHeartBreathe {
+  0%,
+  100% {
+    transform: translateZ(0) scale(0.92);
+    opacity: 0.82;
+    filter: drop-shadow(0 1px 2px rgba(197, 160, 89, 0.35));
+  }
+
+  50% {
+    transform: translateZ(0) scale(1.30);
+    opacity: 1;
+    filter: drop-shadow(0 2px 5px rgba(197, 160, 89, 0.70));
+  }
+}
+
+@keyframes weddingRingPulse {
+  0%,
+  100% {
+    box-shadow: 0 3px 10px rgba(197, 160, 89, 0.22);
+    border-color: var(--gold-primary);
+  }
+
+  50% {
+    box-shadow: 0 5px 20px rgba(197, 160, 89, 0.50), 0 0 0 3px rgba(197, 160, 89, 0.18);
+    border-color: #E5C984;
+  }
+}
+
+/* Segundo día de fiesta (25 de Octubre) - Fino y limpio sin borde punteado */
+.cal-day.celebration-day {
+  background: #FFFFFF;
+  color: var(--gold-dark);
+  border: 1.5px solid rgba(197, 160, 89, 0.5);
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(197, 160, 89, 0.15);
+}
+
+.cal-day.celebration-day .day-num {
+  font-size: 0.88rem;
+  color: var(--gold-dark);
+}
+
+/* Día actual ("HOY") */
+.cal-day.today-highlight {
+  border: 2px solid var(--blue-primary);
+  background: rgba(94, 142, 179, 0.14);
+  color: var(--blue-deep);
+  font-weight: 800;
+  box-shadow: 0 0 10px rgba(94, 142, 179, 0.25);
+}
+
+.today-pill {
+  position: absolute;
+  bottom: -6px;
+  font-size: 0.50rem;
+  font-weight: 800;
+  background: var(--blue-primary);
+  color: #FFF;
+  padding: 1px 4px;
+  border-radius: 8px;
+  letter-spacing: 0.04em;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  line-height: 1.1;
+}
+
+/* Leyenda inferior */
+.cal-legend {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.1rem;
+  flex-wrap: wrap;
+  font-size: 0.76rem;
+  color: var(--text-secondary);
+  padding-top: 0.85rem;
+  border-top: 1px dashed rgba(197, 160, 89, 0.35);
+}
+
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.legend-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+}
+
+.today-dot {
+  background: var(--blue-primary);
+  border: 1.5px solid #FFF;
+  box-shadow: 0 0 0 1px var(--blue-primary);
+}
+
+.wedding-dot {
+  background: var(--gold-primary);
+  border: 1.5px solid #FFF;
+  box-shadow: 0 0 0 1px var(--gold-primary);
+}
+
+/* --------------------------------------------------------------------------
    7. SECCIÓN 3: PADRES & BENDICIÓN
    -------------------------------------------------------------------------- */
 .parents-card {
@@ -1220,34 +1559,7 @@ h4 {
   line-height: 1.45;
 }
 
-/* Noticia de los 3 días de fiesta */
-.celebration-days-notice {
-  background: rgba(197, 160, 89, 0.1);
-  border: 1px dashed var(--gold-primary);
-  border-radius: var(--radius-md);
-  padding: 1.2rem;
-  margin-top: 1.5rem;
-  text-align: center;
-}
 
-.notice-badge {
-  display: inline-block;
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: #FFF;
-  background: var(--gold-dark);
-  padding: 4px 12px;
-  border-radius: 20px;
-  margin-bottom: 0.5rem;
-}
-
-.notice-text {
-  font-size: 0.85rem;
-  color: var(--text-secondary);
-  line-height: 1.5;
-}
 
 /* --------------------------------------------------------------------------
    9. SECCIÓN 5: CÓDIGO DE VESTIMENTA (DRESS CODE)
@@ -1300,36 +1612,112 @@ h4 {
 /* Caja de advertencia de colores reservados */
 .reserved-colors-box {
   display: flex;
-  align-items: flex-start;
-  gap: 0.8rem;
-  background: linear-gradient(135deg, #FFFFFF 0%, #F0F6FB 100%);
+  flex-direction: column;
+  background: linear-gradient(135deg, #FFFFFF 0%, #F4F8FC 100%);
   border: 1px solid var(--blue-border);
   border-left: 4px solid var(--blue-accent);
   border-radius: var(--radius-sm);
-  padding: 1.1rem 1.3rem;
+  padding: 1rem 0.85rem;
   margin-bottom: 2rem;
   text-align: left;
-  box-shadow: 0 4px 16px rgba(126, 170, 201, 0.12);
+  box-shadow: 0 4px 18px rgba(126, 170, 201, 0.12);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.reserved-header-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.7rem;
 }
 
 .warning-ring {
   color: var(--blue-accent);
   flex-shrink: 0;
-  margin-top: 2px;
+  display: flex;
+  align-items: center;
 }
 
-.reserved-text {
+.reserved-main-title {
   font-size: 0.88rem;
+  color: var(--blue-deep);
+  line-height: 1.35;
+  font-weight: 700;
+}
+
+.reserved-days-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 0.65rem;
+  width: 100%;
+}
+
+.reserved-day-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.35rem;
+  width: 100%;
+}
+
+.day-chip {
+  font-size: 0.70rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 2.5px 8px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+.day-chip.saturday-chip {
+  background: rgba(126, 170, 201, 0.2);
+  color: var(--blue-deep);
+  border: 1px solid rgba(126, 170, 201, 0.35);
+}
+
+.day-chip.sunday-chip {
+  background: rgba(184, 93, 67, 0.16);
+  color: #923821;
+  border: 1px solid rgba(184, 93, 67, 0.35);
+}
+
+.day-desc {
+  display: flex;
+  align-items: center;
+  gap: 0.28rem;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+  font-size: 0.75rem;
   color: var(--text-primary);
-  line-height: 1.5;
+  line-height: 1.3;
+  width: 100%;
+}
+
+.day-desc span:not(.reserved-highlight) {
+  font-size: 0.74rem;
+  color: var(--text-secondary);
+}
+
+.reserved-subtext {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  font-style: italic;
+  margin-top: 0.2rem;
 }
 
 .reserved-highlight {
-  font-weight: 700;
-  display: inline-block;
-  padding: 2px 8px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 5px;
   border-radius: 4px;
-  font-size: 0.85rem;
+  font-size: 0.73rem;
+  white-space: nowrap;
+  letter-spacing: -0.01em;
+  flex-shrink: 0;
 }
 
 .reserved-highlight.highlight-white {
@@ -1344,6 +1732,20 @@ h4 {
   border: 1.5px solid #7EAAC9;
   color: #1A324C;
   box-shadow: 0 1px 4px rgba(126, 170, 201, 0.25);
+}
+
+.reserved-highlight.highlight-terracotta {
+  background: #FDF2EE;
+  border: 1.5px solid #B85D43;
+  color: #923821;
+  box-shadow: 0 1px 4px rgba(184, 93, 67, 0.2);
+}
+
+.reserved-highlight.highlight-beige {
+  background: #F8F5EE;
+  border: 1.5px solid #C4A882;
+  color: #6E5331;
+  box-shadow: 0 1px 4px rgba(216, 194, 167, 0.25);
 }
 
 /* Paleta de colores interactiva */
@@ -1406,11 +1808,11 @@ h4 {
 /* Colores prohibidos tachados */
 .forbidden-colors {
   border-top: 1px solid rgba(197, 160, 89, 0.2);
-  padding-top: 1.2rem;
+  padding-top: 1.3rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.6rem;
+  gap: 0.8rem;
 }
 
 .forbidden-label {
@@ -1421,9 +1823,37 @@ h4 {
   font-weight: 600;
 }
 
+.forbidden-days-container {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.forbidden-day-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  background: rgba(255, 255, 255, 0.75);
+  padding: 0.8rem 1.1rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(126, 170, 201, 0.25);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.forbidden-day-title {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--blue-deep);
+}
+
 .forbidden-swatches {
   display: flex;
-  gap: 1.8rem;
+  gap: 1.4rem;
 }
 
 .forbidden-item {
@@ -1450,6 +1880,14 @@ h4 {
   background-color: #BBE1FA;
 }
 
+.terracotta-swatch {
+  background-color: #B85D43;
+}
+
+.beige-swatch {
+  background-color: #D8C2A7;
+}
+
 .forbidden-item .swatch-x {
   position: absolute;
   top: -5px;
@@ -1472,154 +1910,487 @@ h4 {
 }
 
 /* --------------------------------------------------------------------------
-   10. SECCIÓN 6: MESA DE REGALOS / BANCO
+   10. SECCIÓN 6: MESA DE REGALOS (REGALO INTERACTIVO 3D)
    -------------------------------------------------------------------------- */
-.gift-icon-container {
-  width: 64px;
-  height: 64px;
-  border-radius: var(--radius-full);
-  background: var(--gold-metallic);
-  color: #FFF;
+.interactive-gift-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.gift-box-trigger {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  padding: 1rem 0.5rem 0.5rem 0.5rem;
+  border-radius: var(--radius-md);
+  transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  user-select: none;
+  width: 100%;
+  max-width: 320px;
+  background: transparent;
+  border: none;
+}
+
+.gift-box-trigger:focus-visible {
+  outline: 2px solid var(--gold-primary);
+  outline-offset: 4px;
+}
+
+.gift-box-stage {
+  position: relative;
+  width: 120px;
+  height: 110px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto 1.4rem auto;
-  box-shadow: 0 6px 20px var(--gold-shadow);
+  margin-bottom: 0.8rem;
 }
 
-.gifts-message {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-size: 1.05rem;
-  line-height: 1.6;
-  color: var(--text-secondary);
-  margin-bottom: 2rem;
+/* Halo resplandeciente dorado */
+.gift-glow-halo {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(223, 193, 123, 0.55) 0%, rgba(197, 160, 89, 0.20) 50%, transparent 72%);
+  animation: giftGlowPulse 3.2s ease-in-out infinite;
+  pointer-events: none;
+  filter: blur(4px);
 }
 
-/* Tarjeta Bancaria estilo VIP */
-.bank-card {
-  background: linear-gradient(135deg, #162638 0%, #0E1A27 100%);
-  color: #F8FAFC;
-  border: 1px solid rgba(126, 170, 201, 0.35);
-  border-radius: var(--radius-md);
-  padding: 1.8rem 1.4rem;
-  text-align: left;
-  box-shadow: 0 14px 34px rgba(22, 38, 56, 0.35);
+@keyframes giftGlowPulse {
+  0%, 46% {
+    transform: scale(0.95);
+    opacity: 0.5;
+  }
+  65% {
+    transform: scale(1.45);
+    opacity: 0.95;
+    filter: blur(6px);
+  }
+  75% {
+    transform: scale(1.05);
+    opacity: 0.6;
+    filter: blur(4px);
+  }
+  100% {
+    transform: scale(0.95);
+    opacity: 0.5;
+  }
+}
+
+/* Objeto 3D de la Caja de Regalo (Con animación de misterio "algo adentro queriendo salir") */
+.gift-present-box {
   position: relative;
-  overflow: hidden;
-  margin-bottom: 1.6rem;
+  width: 76px;
+  height: 76px;
+  animation: giftMysteryRattle 3.2s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  filter: drop-shadow(0 8px 18px rgba(140, 109, 55, 0.35));
+  transform-origin: center bottom;
 }
 
-.bank-card::after {
+@keyframes giftMysteryRattle {
+  /* 0% a 46%: Reposo expectante con sutil respiración */
+  0%, 46% {
+    transform: translateY(0) rotate(0deg) scale(1);
+  }
+  23% {
+    transform: translateY(-2px) rotate(0deg) scale(1.01);
+  }
+
+  /* 48% a 58%: ¡Golpecitos y temblores desde adentro! */
+  48% {
+    transform: translateY(0) rotate(0deg) scale(1);
+  }
+  50% {
+    transform: translateY(-5px) rotate(-5deg) scale(1.03);
+  }
+  53% {
+    transform: translateY(-2px) rotate(4deg) scale(1.02);
+  }
+  56% {
+    transform: translateY(-6px) rotate(-4deg) scale(1.04);
+  }
+  59% {
+    transform: translateY(-1px) rotate(3deg) scale(1.02);
+  }
+
+  /* 62% a 70%: ¡EL GRAN SALTO! Como si algo intentara empujar la caja */
+  62% {
+    transform: translateY(2px) rotate(0deg) scale(1.06, 0.94);
+  }
+  65% {
+    transform: translateY(-16px) rotate(-2deg) scale(0.97, 1.05);
+  }
+  68% {
+    transform: translateY(-18px) rotate(2deg) scale(0.96, 1.06);
+  }
+  71% {
+    transform: translateY(3px) rotate(0deg) scale(1.06, 0.94);
+  }
+  75% {
+    transform: translateY(-5px) rotate(-1deg) scale(1.02, 0.98);
+  }
+  79% {
+    transform: translateY(0) rotate(0.5deg) scale(1);
+  }
+  83%, 100% {
+    transform: translateY(0) rotate(0deg) scale(1);
+  }
+}
+
+.gift-box-trigger:hover .gift-present-box {
+  transform: scale(1.08) translateY(-4px);
+}
+
+/* Tapa y Moño (La tapa se descoloca y vuela con los golpes internos) */
+.gift-lid {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 82px;
+  height: 22px;
+  z-index: 3;
+  transition: transform 0.65s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transform-origin: left bottom;
+  animation: giftLidMysteryHop 3.2s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+}
+
+@keyframes giftLidMysteryHop {
+  /* 0% a 46%: En reposo */
+  0%, 46% {
+    transform: translateX(-50%) translateY(0) rotate(0deg);
+  }
+
+  /* 48% a 58%: La tapa se sacude por los golpes */
+  50% {
+    transform: translateX(-50%) translateY(-4px) rotate(-6deg);
+  }
+  53% {
+    transform: translateX(-50%) translateY(-2px) rotate(5deg);
+  }
+  56% {
+    transform: translateX(-50%) translateY(-5px) rotate(-5deg);
+  }
+  59% {
+    transform: translateX(-50%) translateY(-1px) rotate(3deg);
+  }
+
+  /* 62% a 70%: La tapa sale despedida hacia arriba */
+  62% {
+    transform: translateX(-50%) translateY(1px) rotate(0deg);
+  }
+  65% {
+    transform: translateX(-50%) translateY(-12px) rotate(-9deg);
+  }
+  68% {
+    transform: translateX(-50%) translateY(-14px) rotate(8deg);
+  }
+  71% {
+    transform: translateX(-50%) translateY(0) rotate(0deg);
+  }
+  75% {
+    transform: translateX(-50%) translateY(-3px) rotate(-2deg);
+  }
+  79%, 100% {
+    transform: translateX(-50%) translateY(0) rotate(0deg);
+  }
+}
+
+.gift-lid-cap {
+  width: 100%;
+  height: 18px;
+  background: linear-gradient(135deg, #DFC17B 0%, #C5A059 55%, #9E7D3B 100%);
+  border-radius: 6px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  position: relative;
+}
+
+.gift-lid-cap::after {
   content: '';
   position: absolute;
-  top: -50px;
-  right: -50px;
-  width: 140px;
-  height: 140px;
-  border-radius: var(--radius-full);
-  background: radial-gradient(circle, rgba(126, 170, 201, 0.25) 0%, transparent 70%);
-  pointer-events: none;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+  width: 14px;
+  height: 100%;
+  background: linear-gradient(180deg, #FFFFFF 0%, #E8F3FA 100%);
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.12);
 }
 
-.bank-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.6rem;
+/* Moño / Lazos */
+.gift-bow {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 16px;
 }
 
-.bank-chip {
-  width: 36px;
-  height: 26px;
-  border-radius: 4px;
-  background: linear-gradient(135deg, #DFC17B 0%, #B38728 100%);
-  border: 1px solid rgba(255, 255, 255, 0.4);
+.bow-loop {
+  position: absolute;
+  top: 0;
+  width: 17px;
+  height: 17px;
+  border: 3px solid #FFFFFF;
+  border-radius: 50% 50% 10% 50%;
+  background: rgba(255, 255, 255, 0.90);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
-.bank-type {
-  font-size: 0.68rem;
-  letter-spacing: 0.18em;
-  color: var(--gold-light);
-  font-weight: 600;
+.bow-left {
+  left: 3px;
+  transform: rotate(-25deg);
 }
 
-.bank-info-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 0.85rem;
-  margin-bottom: 1.6rem;
+.bow-right {
+  right: 3px;
+  transform: scaleX(-1) rotate(-25deg);
 }
 
-.bank-info-group {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
+.bow-knot {
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 10px;
+  height: 10px;
+  background: #FFFFFF;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
 }
 
-.bank-label {
-  font-size: 0.68rem;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: #8CAAC4;
+/* Cuerpo de la Caja */
+.gift-body {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70px;
+  height: 52px;
+  background: linear-gradient(135deg, #C5A059 0%, #B88E3E 50%, #8C6D37 100%);
+  border-radius: 4px 4px 10px 10px;
+  box-shadow: 0 8px 20px rgba(140, 109, 55, 0.30), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  overflow: hidden;
+  z-index: 1;
 }
 
-.bank-value {
-  font-size: 0.95rem;
-  font-weight: 500;
-  color: #FFF;
+.gift-ribbon-v {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+  width: 14px;
+  height: 100%;
+  background: linear-gradient(180deg, #FFFFFF 0%, #E8F3FA 100%);
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
 }
 
-.bank-value.account-num {
-  font-family: monospace;
-  font-size: 1.25rem;
-  letter-spacing: 0.1em;
-  color: var(--gold-light);
-}
-
-.btn-copy {
+.gift-ribbon-h {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
   width: 100%;
-  display: flex;
+  height: 12px;
+  background: linear-gradient(90deg, #E8F3FA 0%, #FFFFFF 50%, #E8F3FA 100%);
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Botón Pastilla CTA */
+.gift-cta-pill {
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  gap: 0.6rem;
+  gap: 0.5rem;
   background: var(--gold-metallic);
   color: #1A2B3C;
-  font-size: 0.84rem;
+  font-size: 0.86rem;
   font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  padding: 0.85rem;
-  border-radius: var(--radius-sm);
-  border: none;
-  cursor: pointer;
+  padding: 0.65rem 1.4rem;
+  border-radius: var(--radius-full);
+  box-shadow: 0 4px 16px var(--gold-shadow);
   transition: var(--transition-smooth);
 }
 
-.btn-copy:hover {
-  filter: brightness(1.1);
+.gift-box-trigger:hover .gift-cta-pill {
   transform: translateY(-2px);
+  box-shadow: 0 6px 22px rgba(197, 160, 89, 0.45);
 }
 
-.btn-copy:active {
-  transform: translateY(0);
+.cta-arrow {
+  transition: transform 0.4s ease;
 }
 
-.btn-copy .check-icon {
-  display: none;
+.gift-subtext {
+  font-size: 0.76rem;
+  color: var(--text-secondary);
+  margin-top: 0.45rem;
+  font-style: italic;
 }
 
-.btn-copy.copied {
-  background: #2E7D32;
-  color: #FFF;
+/* Estado ABIERTO de la Caja de Regalo */
+.interactive-gift-wrapper.is-open .gift-lid {
+  transform: translate(-32%, -26px) rotate(-28deg);
 }
 
-.btn-copy.copied .copy-icon {
-  display: none;
+.interactive-gift-wrapper.is-open .gift-present-box {
+  animation: none;
 }
 
-.btn-copy.copied .check-icon {
+.interactive-gift-wrapper.is-open .cta-arrow {
+  transform: rotate(180deg);
+}
+
+.interactive-gift-wrapper.is-open .gift-cta-pill {
+  background: linear-gradient(135deg, rgba(235, 244, 251, 0.98), rgba(220, 237, 249, 0.95));
+  color: var(--blue-deep);
+  border: 1px solid var(--blue-border);
+}
+
+/* Gaveta Desplegable de Contenido Revelado */
+.gift-drawer {
+  width: 100%;
+  max-height: 0;
+  opacity: 0;
+  transform: translateY(-16px) scale(0.97);
+  overflow: hidden;
+  pointer-events: none;
+  transition: max-height 0.75s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.55s ease, transform 0.55s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.interactive-gift-wrapper.is-open .gift-drawer {
+  max-height: 950px;
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+  margin-top: 1.2rem;
+}
+
+.gift-drawer-inner {
+  padding-top: 0.8rem;
+  border-top: 1px dashed rgba(197, 160, 89, 0.35);
+  animation: contentFadeIn 0.6s ease forwards;
+}
+
+@keyframes contentFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.gift-message-bubble {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(244, 249, 253, 0.92));
+  border: 1px solid rgba(126, 170, 201, 0.35);
+  border-radius: var(--radius-md);
+  padding: 1.4rem 1.2rem;
+  margin-bottom: 1.4rem;
+  box-shadow: 0 4px 18px rgba(126, 170, 201, 0.14);
+  position: relative;
+  text-align: center;
+}
+
+.bubble-heart {
+  color: var(--gold-primary);
+  margin-bottom: 0.4rem;
+}
+
+.gift-message-bubble .gifts-message {
+  margin-bottom: 0;
+  font-size: 0.96rem;
+  color: var(--text-primary);
+}
+
+/* Tarjeta del Código QR Simple BCP */
+.qr-card-container {
+  background: #FFFFFF;
+  border: 1px solid var(--gold-border);
+  border-radius: var(--radius-md);
+  padding: 1.6rem 1.2rem;
+  margin-bottom: 1.8rem;
+  box-shadow: 0 8px 24px rgba(26, 43, 60, 0.06), 0 0 0 1px rgba(197, 160, 89, 0.15);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.qr-card-container .qr-image {
+  width: 100%;
+  max-width: 230px;
+  height: auto;
   display: block;
+  border-radius: 12px;
+  border: 2px solid var(--gold-primary);
+  box-shadow: 0 6px 20px rgba(197, 160, 89, 0.22);
+  margin-bottom: 1.2rem;
+  transition: var(--transition-smooth);
+}
+
+.qr-card-container .qr-image:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 10px 28px rgba(197, 160, 89, 0.35);
+}
+
+.qr-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 1.2rem;
+}
+
+.qr-holder-name {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.qr-bank-name {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+}
+
+.btn-qr-download {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, rgba(235, 244, 251, 0.95), rgba(220, 237, 249, 0.90));
+  color: var(--blue-deep);
+  border: 1px solid var(--blue-border);
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 0.65rem 1.4rem;
+  border-radius: var(--radius-full);
+  text-decoration: none;
+  transition: var(--transition-smooth);
+  box-shadow: 0 2px 8px rgba(126, 170, 201, 0.2);
+}
+
+.btn-qr-download:hover {
+  background: var(--blue-primary);
+  color: #FFF;
+  border-color: var(--blue-primary);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(94, 142, 179, 0.35);
+}
+
+.btn-qr-download svg {
+  color: currentColor;
 }
 
 .envelope-note {
@@ -2431,20 +3202,21 @@ h4 {
   .couple-portrait-wrapper {
     width: 200px;
   }
-}
 
-font-size: 2.8rem;
-}
+  .reserved-colors-box {
+    padding: 0.85rem 0.6rem;
+  }
 
-.countdown-val {
-  font-size: 1.8rem;
-}
+  .day-desc {
+    gap: 0.2rem;
+  }
 
-.countdown-lbl {
-  font-size: 0.62rem;
-}
+  .day-desc span:not(.reserved-highlight) {
+    font-size: 0.68rem;
+  }
 
-.couple-portrait-wrapper {
-  width: 200px;
-}
+  .reserved-highlight {
+    font-size: 0.68rem;
+    padding: 2px 4px;
+  }
 }

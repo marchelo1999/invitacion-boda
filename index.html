@@ -18,7 +18,8 @@
   <meta property="og:description"
     content="Tenemos el honor de invitarte a nuestra boda. Conoce los detalles de la ceremonia, recepción, itinerario y confirma tu asistencia.">
   <meta property="og:image" content="https://marchelo1999.github.io/invitacion-boda/assets/images/og-boda.jpg">
-  <meta property="og:image:secure_url" content="https://marchelo1999.github.io/invitacion-boda/assets/images/og-boda.jpg">
+  <meta property="og:image:secure_url"
+    content="https://marchelo1999.github.io/invitacion-boda/assets/images/og-boda.jpg">
   <meta property="og:image:type" content="image/jpeg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -45,7 +46,7 @@
     rel="stylesheet">
 
   <!-- Estilos Principales -->
-  <link rel="stylesheet" href="css/styles.css?v=13">
+  <link rel="stylesheet" href="css/styles.css?v=24">
 </head>
 
 <body>
@@ -217,6 +218,87 @@
       </div>
       <p class="section-subtitle">Cada segundo nos acerca más a celebrar nuestro amor junto a ti</p>
 
+      <!-- CALENDARIO NUPCIAL SAVE THE DATE (OCTUBRE 2026) -->
+      <div class="wedding-calendar-card glass-panel reveal-item" data-stagger="5">
+        <div class="cal-header">
+          <span class="cal-month">OCTUBRE 2026</span>
+          <span class="cal-couples">Samuel &amp; Jhosselin &bull; Cochabamba</span>
+        </div>
+
+        <!-- Días de la semana (Lunes a Domingo) -->
+        <div class="cal-weekdays">
+          <span>L</span>
+          <span>M</span>
+          <span>M</span>
+          <span>J</span>
+          <span>V</span>
+          <span class="weekend">S</span>
+          <span class="weekend">D</span>
+        </div>
+
+        <!-- Cuadrícula de 31 días (1 Octubre 2026 es Jueves -> 3 días vacíos) -->
+        <div class="cal-grid" id="weddingCalendarGrid">
+          <span class="cal-day cal-empty"></span>
+          <span class="cal-day cal-empty"></span>
+          <span class="cal-day cal-empty"></span>
+          <span class="cal-day" data-day="1">1</span>
+          <span class="cal-day" data-day="2">2</span>
+          <span class="cal-day weekend" data-day="3">3</span>
+          <span class="cal-day weekend" data-day="4">4</span>
+
+          <span class="cal-day" data-day="5">5</span>
+          <span class="cal-day" data-day="6">6</span>
+          <span class="cal-day" data-day="7">7</span>
+          <span class="cal-day" data-day="8">8</span>
+          <span class="cal-day" data-day="9">9</span>
+          <span class="cal-day weekend" data-day="10">10</span>
+          <span class="cal-day weekend" data-day="11">11</span>
+
+          <span class="cal-day" data-day="12">12</span>
+          <span class="cal-day" data-day="13">13</span>
+          <span class="cal-day" data-day="14">14</span>
+          <span class="cal-day" data-day="15">15</span>
+          <span class="cal-day" data-day="16">16</span>
+          <span class="cal-day weekend" data-day="17">17</span>
+          <span class="cal-day weekend" data-day="18">18</span>
+
+          <span class="cal-day" data-day="19">19</span>
+          <span class="cal-day" data-day="20">20</span>
+          <span class="cal-day" data-day="21">21</span>
+          <span class="cal-day" data-day="22">22</span>
+          <span class="cal-day" data-day="23">23</span>
+          <span class="cal-day wedding-day weekend" data-day="24" title="¡El Gran Día de Nuestra Boda!">
+            <span class="day-num">24</span>
+            <svg class="heart-marker" viewBox="0 0 24 24" width="11" height="11" fill="currentColor">
+              <path
+                d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+            </svg>
+          </span>
+          <span class="cal-day celebration-day weekend" data-day="25" title="Segundo Día de Fiesta">
+            <span class="day-num">25</span>
+          </span>
+
+          <span class="cal-day" data-day="26">26</span>
+          <span class="cal-day" data-day="27">27</span>
+          <span class="cal-day" data-day="28">28</span>
+          <span class="cal-day" data-day="29">29</span>
+          <span class="cal-day" data-day="30">30</span>
+          <span class="cal-day weekend" data-day="31">31</span>
+        </div>
+
+        <!-- Leyenda explicativa -->
+        <div class="cal-legend" id="calendarLegend">
+          <div class="legend-item" id="legendToday" style="display: none;">
+            <span class="legend-dot today-dot"></span>
+            <span class="legend-text" id="legendTodayText">Hoy</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-dot wedding-dot"></span>
+            <span class="legend-text">24 Oct: Nuestra Boda</span>
+          </div>
+        </div>
+      </div>
+
       <!-- Botón para agendar en Google Calendar / Descargar Recordatorio -->
       <div class="calendar-action reveal-item" data-stagger="5">
         <a href="#" class="btn-outline-gold" id="btnAddToCalendar" target="_blank" rel="noopener noreferrer">
@@ -308,8 +390,8 @@
             </div>
           </div>
 
-          <a href="https://maps.google.com/?q=Parroquia+Santa+Ana+de+Cala+Cala+La+Recoleta+Cochabamba" target="_blank"
-            rel="noopener noreferrer" class="btn-gold" id="btnMapCeremony">
+          <a href="https://www.google.com/maps/place/Parroquia+La+Recoleta/@-17.3780918,-66.1521093,510m/data=!3m1!1e3!4m6!3m5!1s0x93e3741aeab460b5:0x335b0c40ea737764!8m2!3d-17.3779533!4d-66.1521561!16s%2Fg%2F1tdkc4kd?entry=ttu&g_ep=EgoyMDI2MDkzMC4wIKXMDSoASAFQAw%3D%3D"
+            target="_blank" rel="noopener noreferrer" class="btn-gold" id="btnMapCeremony">
             <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
               <path
                 d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
@@ -412,13 +494,6 @@
             </div>
           </div>
         </div>
-
-        <div class="celebration-days-notice">
-          <div class="notice-badge">24 y 25 de Octubre</div>
-          <p class="notice-text">
-            Nos acompañaremos ambos días (24 y 25 de Octubre) en la recepción para celebrar juntos este momento tan especial.
-          </p>
-        </div>
       </div>
     </section>
 
@@ -453,19 +528,38 @@
 
         <!-- Indicación clave de colores reservados -->
         <div class="reserved-colors-box">
-          <div class="warning-ring">
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="10" />
-              <line x1="12" y1="8" x2="12" y2="12" />
-              <line x1="12" y1="16" x2="12.01" y2="16" />
-            </svg>
+          <div class="reserved-header-row">
+            <div class="warning-ring">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10" />
+                <line x1="12" y1="8" x2="12" y2="12" />
+                <line x1="12" y1="16" x2="12.01" y2="16" />
+              </svg>
+            </div>
+            <strong class="reserved-main-title">Colores Reservados Exclusivamente para los Novios:</strong>
           </div>
-          <p class="reserved-text">
-            <strong>Colores Reservados:</strong> El <span class="reserved-highlight highlight-white">Blanco
-              (Novia)</span> y el <span class="reserved-highlight highlight-blue">Celeste (Novio)</span> están
-            reservados exclusivamente para los novios. ¡Nos encantará
-            verte lucir otros colores!
-          </p>
+
+          <div class="reserved-days-list">
+            <div class="reserved-day-item">
+              <span class="day-chip saturday-chip">Sábado 24 (Boda &amp; Gala)</span>
+              <div class="day-desc">
+                <span>El</span>
+                <span class="reserved-highlight highlight-white">Blanco (Novia)</span>
+                <span>y el</span>
+                <span class="reserved-highlight highlight-blue">Celeste (Novio)</span>
+              </div>
+            </div>
+            <div class="reserved-day-item">
+              <span class="day-chip sunday-chip">Domingo 25 (Fiesta)</span>
+              <div class="day-desc">
+                <span>El</span>
+                <span class="reserved-highlight highlight-terracotta">Terracota (Novia)</span>
+                <span>y el</span>
+                <span class="reserved-highlight highlight-beige">Beige (Novio)</span>
+              </div>
+            </div>
+          </div>
+          <p class="reserved-subtext">¡Nos encantará verte lucir otros hermosos colores en cada día!</p>
         </div>
 
         <!-- Paleta sugerida de tonos tierra / elegantes con interactividad -->
@@ -473,17 +567,17 @@
           <p class="palette-intro">Colores sugeridos para inspirar tu atuendo (toca cada círculo):</p>
           <div class="color-swatches" id="colorSwatches">
             <button class="color-swatch" style="--c: #C5A059;" data-color="Dorado / Champagne"
-              data-tip="Toque sofisticado y festivo" aria-label="Dorado"></button>
-            <button class="color-swatch" style="--c: #B85D43;" data-color="Terracota Cálido"
-              data-tip="Tono tierra muy favorecedor" aria-label="Terracota"></button>
+              data-tip="Toque sofisticado, festivo y radiante" aria-label="Dorado"></button>
             <button class="color-swatch" style="--c: #2D5A46;" data-color="Verde Esmeralda"
-              data-tip="Sobrio, elegante y natural" aria-label="Verde Esmeralda"></button>
+              data-tip="Sobrio, elegante y de distinción" aria-label="Verde Esmeralda"></button>
             <button class="color-swatch" style="--c: #6B2D38;" data-color="Marsala / Vino"
-              data-tip="Elegancia atemporal nocturna" aria-label="Vino Tinto"></button>
-            <button class="color-swatch" style="--c: #D8B4A0;" data-color="Nude / Beige Cálido"
-              data-tip="Delicado y armónico" aria-label="Nude"></button>
+              data-tip="Elegancia nocturna profunda y clásica" aria-label="Vino Tinto"></button>
             <button class="color-swatch" style="--c: #1B2A4A;" data-color="Azul Marino Profundo"
-              data-tip="Clásico y muy distinguido" aria-label="Azul Marino"></button>
+              data-tip="Muy distinguido y atemporal" aria-label="Azul Marino"></button>
+            <button class="color-swatch" style="--c: #C98A92;" data-color="Rosa Palo / Dusty Rose"
+              data-tip="Romántico, suave y armónico" aria-label="Rosa Palo"></button>
+            <button class="color-swatch" style="--c: #7D6B8D;" data-color="Lavanda / Malva"
+              data-tip="Dulce, moderno y sutil" aria-label="Lavanda"></button>
           </div>
           <div class="swatch-feedback" id="swatchFeedback">
             <span class="feedback-color" id="feedbackColor">Selecciona un color</span>
@@ -493,16 +587,39 @@
           <!-- Muestra de colores que NO se deben usar -->
           <div class="forbidden-colors">
             <span class="forbidden-label">Colores Exclusivos de los Novios (Por favor evitar):</span>
-            <div class="forbidden-swatches">
-              <div class="forbidden-item" title="Blanco reservado para la novia Jhosselin">
-                <span class="swatch-circle white-swatch"></span>
-                <span class="swatch-x">&times;</span>
-                <span class="swatch-name">Blanco (Novia)</span>
+            <div class="forbidden-days-container">
+              <!-- Sábado 24 -->
+              <div class="forbidden-day-group">
+                <span class="forbidden-day-title">Sábado 24 de Octubre</span>
+                <div class="forbidden-swatches">
+                  <div class="forbidden-item" title="Blanco reservado para la novia Jhosselin (Sábado)">
+                    <span class="swatch-circle white-swatch"></span>
+                    <span class="swatch-x">&times;</span>
+                    <span class="swatch-name">Blanco (Novia)</span>
+                  </div>
+                  <div class="forbidden-item" title="Celeste reservado para el novio Samuel (Sábado)">
+                    <span class="swatch-circle lightblue-swatch"></span>
+                    <span class="swatch-x">&times;</span>
+                    <span class="swatch-name">Celeste (Novio)</span>
+                  </div>
+                </div>
               </div>
-              <div class="forbidden-item" title="Celeste reservado para el novio Samuel">
-                <span class="swatch-circle lightblue-swatch"></span>
-                <span class="swatch-x">&times;</span>
-                <span class="swatch-name">Celeste (Novio)</span>
+
+              <!-- Domingo 25 -->
+              <div class="forbidden-day-group">
+                <span class="forbidden-day-title">Domingo 25 de Octubre</span>
+                <div class="forbidden-swatches">
+                  <div class="forbidden-item" title="Terracota reservado para la novia Jhosselin (Domingo)">
+                    <span class="swatch-circle terracotta-swatch"></span>
+                    <span class="swatch-x">&times;</span>
+                    <span class="swatch-name">Terracota (Novia)</span>
+                  </div>
+                  <div class="forbidden-item" title="Beige reservado para el novio Samuel (Domingo)">
+                    <span class="swatch-circle beige-swatch"></span>
+                    <span class="swatch-x">&times;</span>
+                    <span class="swatch-name">Beige (Novio)</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -518,17 +635,88 @@
 
       <div class="gifts-card glass-panel has-shimmer">
         <img src="assets/images/floral-corner-bl.webp" class="card-flower-bl" alt="" aria-hidden="true">
-        <div class="gift-icon-container">
-          <!-- Icono de Caja de Regalo con lazo -->
-          <svg viewBox="0 0 24 24" width="36" height="36" fill="currentColor">
-            <path
-              d="M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.05 0-1.96.54-2.5 1.35l-.5.65-.5-.65C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-5-2c.55 0 1 .45 1 1s-.45 1-1 1h-2V5c0-.55.45-1 1-1zM9 4c.55 0 1 .45 1 1v1H8c-.55 0-1-.45-1-1s.45-1 1-1zm11 15H4v-2h16v2zm0-5H4V8h5.08L7 10.83 8.62 12 11 8.76V14h2V8.76L15.38 12 17 10.83 14.92 8H20v6z" />
-          </svg>
-        </div>
 
-        <p class="gifts-message">
-          «Nuestro mejor regalo es tu presencia y tus bendiciones en este gran día.»
-        </p>
+        <!-- Caja de Regalo Interactiva 3D -->
+        <div class="interactive-gift-wrapper" id="interactiveGift">
+
+          <!-- Botón / Disparador del Regalo con Efecto Visual -->
+          <button type="button" class="gift-box-trigger" id="giftBoxTrigger" aria-expanded="false"
+            aria-controls="giftDrawer" aria-label="Abrir regalo interactivo">
+            <div class="gift-box-stage">
+              <!-- Halo resplandeciente dorado -->
+              <div class="gift-glow-halo"></div>
+
+              <!-- Objeto 3D del Regalo -->
+              <div class="gift-present-box">
+                <!-- Tapa separable con moño -->
+                <div class="gift-lid">
+                  <div class="gift-bow">
+                    <span class="bow-loop bow-left"></span>
+                    <span class="bow-loop bow-right"></span>
+                    <span class="bow-knot"></span>
+                  </div>
+                  <div class="gift-lid-cap"></div>
+                </div>
+                <!-- Cuerpo de la caja -->
+                <div class="gift-body">
+                  <div class="gift-ribbon-v"></div>
+                  <div class="gift-ribbon-h"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Botón / Mensaje de Llamado a la Acción -->
+            <div class="gift-cta-pill">
+              <span class="cta-text" id="giftCtaText">Toca para abrir el regalo</span>
+              <svg class="cta-arrow" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+                stroke-width="2.5">
+                <polyline points="6 9 12 15 18 9" />
+              </svg>
+            </div>
+            <span class="gift-subtext">Un detalle especial para ti</span>
+          </button>
+
+          <!-- Contenido Desplegable (Mensaje + QR + Lluvia de Sobres) -->
+          <div class="gift-drawer" id="giftDrawer" aria-hidden="true">
+            <div class="gift-drawer-inner">
+
+              <div class="gift-message-bubble">
+                <div class="bubble-heart">
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+                    <path
+                      d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                  </svg>
+                </div>
+                <p class="gifts-message">
+                  «Nuestro mejor regalo es tu presencia y bendición en este día tan especial. Si deseas tener un detalle
+                  con nosotros para iniciar nuestra vida juntos, puedes hacerlo a través de este código QR»
+                </p>
+              </div>
+
+              <!-- Tarjeta Código QR Simple (BCP) -->
+              <div class="qr-card-container">
+                <img src="assets/images/QRNOVIOS.jpeg" alt="Código QR para regalo de bodas - BCP" class="qr-image"
+                  id="qrNoviosImg" loading="lazy">
+                <div class="qr-meta">
+                  <span class="qr-holder-name">Jhosselin Maria Molina Zurita</span>
+                  <span class="qr-bank-name">Banco BCP &bull; Caja de Ahorros Bs</span>
+                </div>
+                <a href="assets/images/QRNOVIOS.jpeg" download="QR_Boda_Samuel_Jhosselin.jpeg" class="btn-qr-download"
+                  id="btnDownloadQR">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <polyline points="7 10 12 15 17 10" />
+                    <line x1="12" y1="15" x2="12" y2="3" />
+                  </svg>
+                  <span>Guardar QR en Galería</span>
+                </a>
+              </div>
+
+
+            </div>
+          </div>
+
+        </div>
       </div>
     </section>
 
@@ -693,7 +881,7 @@
   </div>
 
   <!-- JavaScript Modular -->
-  <script src="js/main.js?v=5" charset="UTF-8"></script>
+  <script src="js/main.js?v=10" charset="UTF-8"></script>
 </body>
 
 </html>

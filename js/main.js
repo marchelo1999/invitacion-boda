@@ -39,7 +39,7 @@ const CONFIG = {
       name: 'Parroquia “La Recoleta”',
       address: 'Av. Potosí, La Recoleta, Cochabamba, Bolivia',
       time: '17:00 hrs',
-      mapUrl: 'https://maps.google.com/?q=Parroquia+Santa+Ana+de+Cala+Cala+La+Recoleta+Cochabamba'
+      mapUrl: 'https://www.google.com/maps/place/Parroquia+La+Recoleta/@-17.3779344,-66.1521093,17z/data=!4m6!3m5!1s0x93e3741aeab460b5:0x335b80ee9ba49ec4!8m2!3d-17.3779344!4d-66.1521093'
     },
     reception: {
       name: 'Salón de Eventos Deysi',
@@ -51,9 +51,9 @@ const CONFIG = {
 
   // Datos para Mesa de Regalos / Transferencia Bancaria
   bankInfo: {
-    bank: 'Banco Unión / BNB',
-    holder: 'Samuel Martínez / Jhosselin Romero',
-    accountNumber: '10000034892019',
+    bank: 'BCP (Banco de Crédito de Bolivia)',
+    holder: 'Jhosselin Maria Molina Zurita',
+    accountNumber: '301-51058249-3-71',
     accountType: 'Caja de Ahorros en Bolivianos (Bs)'
   }
 };
@@ -194,7 +194,8 @@ function initAudioPlayer() {
       envelopeOverlay.classList.add('opened');
       setTimeout(() => {
         envelopeOverlay.style.display = 'none';
-      }, 950);
+        checkWeddingDayCelebration();
+      }, 1350);
     }
 
     btnOpenInvitation.addEventListener('click', openEnvelope);
@@ -243,47 +244,42 @@ function initDressCodeSwatches() {
 }
 
 /* ==========================================================================
-   MÓDULO 5: COPIAR NÚMERO DE CUENTA AL PORTAPAPELES
+   MÓDULO 5: REGALO INTERACTIVO 3D (REVELACIÓN DE QR & MENSAJE)
    ========================================================================== */
-function initBankCardCopy() {
-  const btnCopy = document.getElementById('btnCopyAccount');
-  if (!btnCopy) return;
+function initInteractiveGift() {
+  const trigger = document.getElementById('giftBoxTrigger');
+  const wrapper = document.getElementById('interactiveGift');
+  const drawer = document.getElementById('giftDrawer');
+  const ctaText = document.getElementById('giftCtaText');
 
-  btnCopy.addEventListener('click', async () => {
-    const textToCopy = btnCopy.getAttribute('data-copy-target') || CONFIG.bankInfo.accountNumber;
+  if (!trigger || !wrapper || !drawer) return;
 
-    try {
-      if (navigator.clipboard && window.isSecureContext) {
-        await navigator.clipboard.writeText(textToCopy);
-      } else {
-        // Fallback clásico
-        const textArea = document.createElement('textarea');
-        textArea.value = textToCopy;
-        textArea.style.position = 'fixed';
-        textArea.style.opacity = '0';
-        document.body.appendChild(textArea);
-        textArea.focus();
-        textArea.select();
-        document.execCommand('copy');
-        document.body.removeChild(textArea);
-      }
+  function toggleGift(e) {
+    if (e) e.preventDefault();
+    const isOpen = wrapper.classList.toggle('is-open');
 
-      // Feedback visual en el botón
-      btnCopy.classList.add('copied');
-      const textSpan = btnCopy.querySelector('.copy-text');
-      const originalText = textSpan ? textSpan.textContent : '';
-      if (textSpan) textSpan.textContent = '¡Número Copiado!';
+    trigger.setAttribute('aria-expanded', String(isOpen));
+    drawer.setAttribute('aria-hidden', String(!isOpen));
 
-      showToast('¡Número de cuenta copiado al portapapeles!');
+    if (ctaText) {
+      ctaText.textContent = isOpen ? 'Ocultar detalle' : 'Toca para abrir el regalo';
+    }
 
+    if (isOpen) {
+      // Pequeño desplazamiento suave si es necesario para enfocar el contenido revelado
       setTimeout(() => {
-        btnCopy.classList.remove('copied');
-        if (textSpan) textSpan.textContent = originalText;
-      }, 2500);
+        const rect = drawer.getBoundingClientRect();
+        if (rect.bottom > window.innerHeight) {
+          drawer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+      }, 350);
+    }
+  }
 
-    } catch (err) {
-      console.error('Error al copiar:', err);
-      showToast('No se pudo copiar automáticamente. Número: ' + textToCopy);
+  trigger.addEventListener('click', toggleGift);
+  trigger.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      toggleGift(e);
     }
   });
 }
@@ -536,17 +532,193 @@ function initNavigation() {
 }
 
 /* ==========================================================================
+   MÓDULO 10: CALENDARIO INTERACTIVO SAVE THE DATE (OCTUBRE 2026)
+   ========================================================================== */
+function initWeddingCalendar() {
+  const grid = document.getElementById('weddingCalendarGrid');
+  const legendToday = document.getElementById('legendToday');
+  const legendTodayText = document.getElementById('legendTodayText');
+  if (!grid) return;
+
+  const now = new Date();
+  const currentDay = now.getDate();
+  const currentMonth = now.getMonth(); // 0-indexed: 9 = Octubre
+
+  // Si estamos en el mes de Octubre:
+  if (currentMonth === 9) {
+    const todayCell = grid.querySelector(`.cal-day[data-day="${currentDay}"]`);
+    if (todayCell && currentDay !== 24) {
+      todayCell.classList.add('today-highlight');
+      todayCell.setAttribute('title', `Hoy: ${currentDay} de Octubre`);
+
+      const pill = document.createElement('span');
+      pill.className = 'today-pill';
+      pill.textContent = 'HOY';
+      todayCell.appendChild(pill);
+
+      if (legendToday && legendTodayText) {
+        legendToday.style.display = 'inline-flex';
+        legendTodayText.textContent = `Hoy (${currentDay} de Octubre)`;
+      }
+    } else if (currentDay === 24) {
+      if (legendToday && legendTodayText) {
+        legendToday.style.display = 'inline-flex';
+        legendTodayText.textContent = `¡Hoy es Nuestra Boda! 🎉`;
+      }
+    }
+  } else {
+    // Si visita en otro mes:
+    const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+    if (legendToday && legendTodayText) {
+      legendToday.style.display = 'inline-flex';
+      legendTodayText.textContent = `Hoy: ${currentDay} de ${months[currentMonth]}`;
+    }
+  }
+}
+
+/* ==========================================================================
+   MÓDULO 11: CELEBRACIÓN DEL GRAN DÍA (CONFETI DORADO VIRTUAL)
+   ========================================================================== */
+function triggerWeddingDayConfetti() {
+  // Evitar duplicar canvas si ya hay una animación activa
+  if (document.getElementById('weddingConfettiCanvas')) return;
+
+  const canvas = document.createElement('canvas');
+  canvas.id = 'weddingConfettiCanvas';
+  canvas.style.position = 'fixed';
+  canvas.style.top = '0';
+  canvas.style.left = '0';
+  canvas.style.width = '100vw';
+  canvas.style.height = '100vh';
+  canvas.style.pointerEvents = 'none';
+  canvas.style.zIndex = '99999';
+  document.body.appendChild(canvas);
+
+  const ctx = canvas.getContext('2d');
+  let width = (canvas.width = window.innerWidth);
+  let height = (canvas.height = window.innerHeight);
+
+  const handleResize = () => {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+  };
+  window.addEventListener('resize', handleResize);
+
+  // Paleta de confeti nupcial: Oro noble, champán, blanco perla y celeste tenue
+  const colors = [
+    '#C5A059', '#DFC17B', '#8C6D37', '#F6E6B4',
+    '#FFFFFF', '#E8F3FA', '#7EAAC9'
+  ];
+
+  const pieceCount = 95;
+  const particles = [];
+
+  for (let i = 0; i < pieceCount; i++) {
+    particles.push({
+      x: Math.random() * width,
+      y: Math.random() * -height * 0.9,
+      size: 6 + Math.random() * 8,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      speedY: 2 + Math.random() * 3.5,
+      speedX: (Math.random() - 0.5) * 2,
+      rotation: Math.random() * 360,
+      rotationSpeed: (Math.random() - 0.5) * 6,
+      opacity: 1,
+      shape: Math.random() > 0.4 ? 'rect' : 'circle'
+    });
+  }
+
+  let animationFrameId;
+  const startTime = Date.now();
+  const duration = 6500; // 6.5 segundos de lluvia dorada
+
+  function render() {
+    const elapsed = Date.now() - startTime;
+    ctx.clearRect(0, 0, width, height);
+
+    let stillActive = false;
+
+    particles.forEach(p => {
+      p.y += p.speedY;
+      p.x += p.speedX + Math.sin(p.y * 0.015) * 0.8;
+      p.rotation += p.rotationSpeed;
+
+      // Desvanecer suavemente en los últimos 2 segundos
+      if (elapsed > 4500) {
+        p.opacity = Math.max(0, 1 - (elapsed - 4500) / 2000);
+      }
+
+      if (p.y < height && p.opacity > 0) {
+        stillActive = true;
+      }
+
+      ctx.save();
+      ctx.globalAlpha = p.opacity;
+      ctx.translate(p.x, p.y);
+      ctx.rotate((p.rotation * Math.PI) / 180);
+      ctx.fillStyle = p.color;
+
+      if (p.shape === 'rect') {
+        ctx.fillRect(-p.size / 2, -p.size / 4, p.size, p.size / 2);
+      } else {
+        ctx.beginPath();
+        ctx.arc(0, 0, p.size / 2.5, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.restore();
+    });
+
+    if (elapsed < duration && stillActive) {
+      animationFrameId = requestAnimationFrame(render);
+    } else {
+      cancelAnimationFrame(animationFrameId);
+      window.removeEventListener('resize', handleResize);
+      if (canvas.parentNode) {
+        canvas.parentNode.removeChild(canvas);
+      }
+    }
+  }
+
+  render();
+}
+
+function checkWeddingDayCelebration() {
+  const now = new Date();
+  const currentDay = now.getDate();
+  const currentMonth = now.getMonth(); // 9 = Octubre
+  const currentYear = now.getFullYear();
+
+  // Si es 24 o 25 de Octubre de 2026:
+  const isWeddingDay = (currentYear === 2026 && currentMonth === 9 && (currentDay === 24 || currentDay === 25));
+
+  if (isWeddingDay) {
+    // Si el sobre ya está abierto o cuando se abra, lanzar confeti
+    const envelopeOverlay = document.getElementById('envelopeOverlay');
+    if (!envelopeOverlay || envelopeOverlay.style.display === 'none') {
+      setTimeout(() => {
+        triggerWeddingDayConfetti();
+      }, 1200);
+    }
+  }
+}
+
+// Función accesible globalmente para probar el confeti en cualquier momento:
+window.testWeddingDayConfetti = triggerWeddingDayConfetti;
+
+/* ==========================================================================
    INICIALIZACIÓN AL CARGAR EL DOM
    ========================================================================== */
 document.addEventListener('DOMContentLoaded', () => {
   initCountdown();
+  initWeddingCalendar();
   initCalendarLink();
   initAudioPlayer();
   initDressCodeSwatches();
-  initBankCardCopy();
+  initInteractiveGift();
   initRSVPForm();
   initScrollReveal();
   initScrollProgressBar();
   initScrollAudioReactive();
   initNavigation();
+  checkWeddingDayCelebration();
 });
