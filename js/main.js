@@ -325,12 +325,16 @@ function initRSVPForm() {
     form.style.display = 'none';
     if (successCard) {
       successCard.style.display = 'flex';
+      let wishMsgHtml = '';
+      if (data.customMessage) {
+        wishMsgHtml = `<br><span class="success-wish-note">💌 Tu dedicatoria se publicó de forma anónima en el <strong>Muro de Deseos</strong> de abajo.</span>`;
+      }
       if (data.willAttend) {
         successTitle.textContent = `¡Muchas gracias, ${data.name}! ✨`;
-        successDesc.innerHTML = `Tu confirmación para <strong>${data.passes} ${data.passes === 1 ? 'persona' : 'personas'}</strong> ha sido registrada con éxito en la lista oficial de los novios.<br>¡Nos vemos este <strong>24 de Octubre de 2026</strong> para celebrar juntos!`;
+        successDesc.innerHTML = `Tu confirmación para <strong>${data.passes} ${data.passes === 1 ? 'persona' : 'personas'}</strong> ha sido registrada con éxito en la lista oficial de los novios.<br>¡Nos vemos este <strong>24 de Octubre de 2026</strong> para celebrar juntos!${wishMsgHtml}`;
       } else {
         successTitle.textContent = `Gracias por avisarnos, ${data.name}`;
-        successDesc.innerHTML = `Lamentamos mucho que no puedas acompañarnos físicamente, pero sabemos que estarás presente en corazón y oraciones. ¡Te mandamos un gran abrazo!`;
+        successDesc.innerHTML = `Lamentamos mucho que no puedas acompañarnos físicamente, pero sabemos que estarás presente en corazón y oraciones. ¡Te mandamos un gran abrazo!${wishMsgHtml}`;
       }
     }
   }
@@ -340,6 +344,18 @@ function initRSVPForm() {
     btnModify.addEventListener('click', () => {
       if (successCard) successCard.style.display = 'none';
       form.style.display = 'block';
+    });
+  }
+
+  // Botón directo para deslizar hacia el Muro de Dedicatorias
+  const btnGoToWishes = document.getElementById('btnGoToWishes');
+  if (btnGoToWishes) {
+    btnGoToWishes.addEventListener('click', (e) => {
+      e.preventDefault();
+      const wishesSection = document.getElementById('wishes-section');
+      if (wishesSection) {
+        wishesSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     });
   }
 
@@ -402,11 +418,177 @@ function initRSVPForm() {
       }
     }
 
+    // Si el invitado escribió una dedicatoria, agregarla al Muro de Deseos anónimamente
+    if (customMessage) {
+      if (typeof addWishToWall === 'function') {
+        addWishToWall(customMessage, 'Reciente');
+      }
+    }
+
     // Quitar estado de carga y mostrar tarjeta de éxito
     if (btnSubmit) btnSubmit.classList.remove('submitting');
     showToast('¡Confirmación registrada con éxito!');
     displaySuccessState(payload);
+
+    // Auto-scroll suave automático hacia el Muro de Dedicatorias para que sí o sí lo vean
+    setTimeout(() => {
+      const wishesSection = document.getElementById('wishes-section');
+      if (wishesSection) {
+        wishesSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 1800);
   });
+}
+
+/* ==========================================================================
+   MÓDULO 6.5: MURO DE DEDICATORIAS / LIBRO DE DESEOS ANÓNIMOS
+   ========================================================================== */
+let globalWishesList = [];
+
+function escapeHtml(str) {
+  if (!str) return '';
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+function formatWishDate(raw) {
+  if (!raw || raw === 'Reciente' || raw === 'Bendición' || raw === 'Buenos Deseos' || raw === 'Con Cariño') {
+    return raw || 'Reciente';
+  }
+  try {
+    const d = new Date(raw);
+    if (!isNaN(d.getTime())) {
+      return d.toLocaleDateString('es-BO', { day: '2-digit', month: 'short' });
+    }
+  } catch (e) {}
+  return raw;
+}
+
+function renderWishCard(wish, isNew = false) {
+  const safeMsg = escapeHtml(wish.message);
+  const safeTime = escapeHtml(formatWishDate(wish.timestamp));
+  return `
+    <article class="wish-item-card ${isNew ? 'is-new-wish' : ''}">
+      <div class="wish-card-quote-mark" aria-hidden="true">“</div>
+      <p class="wish-card-message">${safeMsg}</p>
+      <div class="wish-card-meta">
+        <span class="wish-meta-author">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+          </svg>
+          Deseo anónimo con cariño
+        </span>
+        <span class="wish-meta-time">${safeTime}</span>
+      </div>
+    </article>
+  `;
+}
+
+function updateWishesCountUI(count) {
+  const countText = document.getElementById('wishesCountText');
+  if (countText) {
+    countText.textContent = `${count} ${count === 1 ? 'Dedicatoria Compartida' : 'Dedicatorias Compartidas'}`;
+  }
+}
+
+function addWishToWall(message, timestamp = 'Reciente') {
+  if (!message || !message.trim()) return;
+  const cleanMsg = message.trim();
+  const grid = document.getElementById('wishesWallGrid');
+
+  const newWish = {
+    id: 'user-' + Date.now(),
+    message: cleanMsg,
+    timestamp: timestamp
+  };
+
+  // Guardar en array global y en localStorage
+  globalWishesList.unshift(newWish);
+  try {
+    const stored = JSON.parse(localStorage.getItem('samuel_jhosselin_custom_wishes') || '[]');
+    stored.unshift(newWish);
+    localStorage.setItem('samuel_jhosselin_custom_wishes', JSON.stringify(stored));
+  } catch (e) {}
+
+  if (grid) {
+    const emptyState = grid.querySelector('.wishes-empty-state');
+    if (emptyState) emptyState.remove();
+    const cardHtml = renderWishCard(newWish, true);
+    grid.insertAdjacentHTML('afterbegin', cardHtml);
+    updateWishesCountUI(globalWishesList.length);
+  }
+}
+
+async function initWishesWall() {
+  const grid = document.getElementById('wishesWallGrid');
+  if (!grid) return;
+
+  let allWishes = [];
+
+  // 1. Cargar deseos locales guardados por este usuario
+  try {
+    const localSaved = JSON.parse(localStorage.getItem('samuel_jhosselin_custom_wishes') || '[]');
+    if (Array.isArray(localSaved) && localSaved.length) {
+      allWishes = [...localSaved];
+    }
+  } catch (e) {}
+
+  // 2. Consultar Google Sheets si CONFIG.googleScriptUrl está configurado (Producción / Online)
+  if (CONFIG.googleScriptUrl) {
+    try {
+      const gRes = await fetch(CONFIG.googleScriptUrl);
+      if (gRes.ok) {
+        const sheetWishes = await gRes.json();
+        if (Array.isArray(sheetWishes) && sheetWishes.length) {
+          const existingMessages = new Set(allWishes.map(w => w.message.trim()));
+          sheetWishes.forEach(sw => {
+            if (sw.message && !existingMessages.has(sw.message.trim())) {
+              existingMessages.add(sw.message.trim());
+              allWishes.unshift(sw);
+            }
+          });
+        }
+      }
+    } catch (gErr) {
+      console.warn('Consulta a Google Sheets para dedicatorias:', gErr);
+    }
+  }
+
+  // 3. Consultar la API del servidor local (/api/wishes) si está disponible
+  try {
+    const res = await fetch('/api/wishes');
+    if (res.ok) {
+      const serverWishes = await res.json();
+      if (Array.isArray(serverWishes) && serverWishes.length) {
+        // Evitar duplicados por mensaje exacto
+        const existingMessages = new Set(allWishes.map(w => w.message.trim()));
+        serverWishes.forEach(sw => {
+          if (sw.message && !existingMessages.has(sw.message.trim())) {
+            existingMessages.add(sw.message.trim());
+            allWishes.unshift(sw);
+          }
+        });
+      }
+    }
+  } catch (err) {
+    // Si la API no está disponible, continúa con el resto
+  }
+
+  globalWishesList = allWishes;
+  if (allWishes.length) {
+    grid.innerHTML = allWishes.map(w => renderWishCard(w)).join('');
+  } else {
+    grid.innerHTML = `
+      <div class="wishes-empty-state">
+        <p>Aún no hay dedicatorias. ¡Sé el primero en dejarle un hermoso mensaje a los novios al confirmar tu asistencia!</p>
+      </div>
+    `;
+  }
+  updateWishesCountUI(allWishes.length);
 }
 
 /* ==========================================================================
@@ -716,6 +898,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initDressCodeSwatches();
   initInteractiveGift();
   initRSVPForm();
+  initWishesWall();
   initScrollReveal();
   initScrollProgressBar();
   initScrollAudioReactive();

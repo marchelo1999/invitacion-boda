@@ -2716,6 +2716,49 @@ h4 {
   flex-shrink: 0;
 }
 
+.btn-view-wishes {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  background: var(--gold-gradient);
+  color: #1A2B3C;
+  font-family: var(--font-sans);
+  font-size: 0.92rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 0.9rem 1.6rem;
+  border-radius: var(--radius-full);
+  text-decoration: none;
+  box-shadow: 0 4px 18px rgba(197, 160, 89, 0.35);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  width: 100%;
+  max-width: 330px;
+}
+
+.btn-view-wishes:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(197, 160, 89, 0.5);
+  color: #1A2B3C;
+}
+
+.btn-view-wishes svg {
+  color: #B85D43;
+  flex-shrink: 0;
+  transition: transform 0.25s ease;
+}
+
+.btn-view-wishes:hover svg {
+  transform: scale(1.15);
+}
+
+.success-wish-note {
+  display: inline-block;
+  margin-top: 0.6rem;
+  font-size: 0.88rem;
+  color: var(--blue-muted);
+}
+
 .btn-text-modify {
   background: none;
   border: none;
@@ -2730,6 +2773,198 @@ h4 {
 
 .btn-text-modify:hover {
   color: var(--blue-deep);
+}
+
+/* Nota explicativa de dedicatorias anónimas en RSVP */
+.form-hint-note {
+  display: block;
+  font-size: 0.76rem;
+  color: var(--blue-muted);
+  margin-top: 0.4rem;
+  font-style: italic;
+  line-height: 1.4;
+}
+
+/* --------------------------------------------------------------------------
+   11.5. SECCIÓN 8: MURO DE DEDICATORIAS ANÓNIMAS
+   -------------------------------------------------------------------------- */
+.wishes-section {
+  padding-top: 2.5rem;
+  padding-bottom: 2.5rem;
+}
+
+.wishes-card {
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.wishes-header-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: rgba(126, 170, 201, 0.16);
+  border: 1px solid var(--blue-border);
+  color: var(--blue-deep);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.45rem 1.1rem;
+  border-radius: var(--radius-full);
+  margin-bottom: 1.8rem;
+  box-shadow: 0 2px 8px rgba(126, 170, 201, 0.1);
+}
+
+.wishes-header-badge svg {
+  color: #B85D43;
+}
+
+.wishes-wall-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  max-height: 480px;
+  overflow-y: auto;
+  padding-right: 0.3rem;
+  margin-bottom: 1.5rem;
+  scroll-behavior: smooth;
+}
+
+/* Scrollbar estilizado y elegante para el muro de deseos */
+.wishes-wall-grid::-webkit-scrollbar {
+  width: 5px;
+}
+
+.wishes-wall-grid::-webkit-scrollbar-track {
+  background: rgba(126, 170, 201, 0.1);
+  border-radius: 10px;
+}
+
+.wishes-wall-grid::-webkit-scrollbar-thumb {
+  background: rgba(197, 160, 89, 0.45);
+  border-radius: 10px;
+}
+
+.wishes-wall-grid::-webkit-scrollbar-thumb:hover {
+  background: var(--gold-primary);
+}
+
+.wishes-empty-state {
+  padding: 2.5rem 1rem;
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  font-style: italic;
+  color: var(--text-muted);
+  text-align: center;
+  line-height: 1.6;
+}
+
+.wish-item-card {
+  position: relative;
+  background: linear-gradient(145deg, #FFFFFF 0%, #F5F9FD 60%, #EEF5FB 100%);
+  border: 1.5px solid rgba(126, 170, 201, 0.35);
+  border-radius: var(--radius-md);
+  padding: 1.25rem 1.4rem;
+  text-align: left;
+  box-shadow: 0 4px 14px rgba(126, 170, 201, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.wish-item-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(126, 170, 201, 0.18);
+  border-color: var(--blue-accent);
+}
+
+.wish-item-card.is-new-wish {
+  animation: wishPopIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  border-color: var(--gold-primary);
+  background: linear-gradient(145deg, #FFFFFD 0%, #FFF9F0 100%);
+  box-shadow: 0 0 0 2px rgba(197, 160, 89, 0.35), 0 8px 25px rgba(197, 160, 89, 0.2);
+}
+
+@keyframes wishPopIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-16px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.wish-card-quote-mark {
+  position: absolute;
+  top: 8px;
+  right: 14px;
+  font-family: var(--font-serif);
+  font-size: 2.8rem;
+  line-height: 1;
+  color: rgba(197, 160, 89, 0.25);
+  pointer-events: none;
+  font-style: italic;
+}
+
+.wish-card-message {
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  font-style: italic;
+  color: var(--text-primary);
+  line-height: 1.6;
+  margin-bottom: 0.9rem;
+  position: relative;
+  z-index: 1;
+  word-break: break-word;
+}
+
+.wish-card-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.74rem;
+  color: var(--text-muted);
+  border-top: 1px dashed rgba(126, 170, 201, 0.25);
+  padding-top: 0.65rem;
+}
+
+.wish-meta-author {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-weight: 600;
+  color: var(--blue-deep);
+  letter-spacing: 0.02em;
+}
+
+.wish-meta-author svg {
+  color: #B85D43;
+}
+
+.wish-meta-time {
+  font-size: 0.70rem;
+  color: var(--text-muted);
+}
+
+.wishes-privacy-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(126, 170, 201, 0.3);
+  padding: 0.65rem 1rem;
+  border-radius: var(--radius-sm);
+  margin-top: 1.2rem;
+  line-height: 1.45;
+}
+
+.wishes-privacy-banner svg {
+  color: var(--blue-accent);
+  flex-shrink: 0;
 }
 
 /* --------------------------------------------------------------------------
@@ -2801,6 +3036,30 @@ h4 {
   background: var(--blue-accent);
   color: #FFF;
   border-color: var(--blue-accent);
+}
+
+.developer-credit {
+  margin-top: 2rem;
+  padding-top: 1.2rem;
+  border-top: 1px dashed rgba(126, 170, 201, 0.35);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.developer-credit p {
+  font-family: var(--font-sans);
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin: 0;
+  letter-spacing: 0.02em;
+}
+
+.developer-credit strong {
+  color: var(--blue-deep);
+  font-weight: 600;
 }
 
 /* --------------------------------------------------------------------------

@@ -10,6 +10,7 @@
   <meta name="description"
     content="Acompáñanos a celebrar nuestra boda. Samuel & Jhosselin. 24 de Octubre de 2026. Información del evento, ubicaciones, itinerario y confirmación de asistencia.">
   <meta name="author" content="Samuel & Jhosselin">
+  <meta name="developer" content="Ariel Marcelo Martínez Zurita">
 
   <!-- Open Graph / Meta para compartir en WhatsApp y redes sociales -->
   <meta property="og:type" content="website">
@@ -46,7 +47,7 @@
     rel="stylesheet">
 
   <!-- Estilos Principales -->
-  <link rel="stylesheet" href="css/styles.css?v=24">
+  <link rel="stylesheet" href="css/styles.css?v=28">
 </head>
 
 <body>
@@ -797,11 +798,13 @@
 
           <!-- Campo: Mensaje / Felicitación -->
           <div class="form-group">
-            <label for="guestMessage" class="form-label">Mensaje para los novios (Opcional)</label>
+            <label for="guestMessage" class="form-label">Mensaje o Dedicatoria para los novios (Opcional)</label>
             <div class="input-wrapper">
               <textarea id="guestMessage" name="guestMessage" class="form-input form-textarea" rows="3"
-                placeholder="Escríbenos una dedicatoria o especifica si tienes alguna restricción dietética..."></textarea>
+                placeholder="Escríbeles un hermoso deseo o bendición..."></textarea>
             </div>
+            <small class="form-hint-note">✨ Tu dedicatoria se publicará en el Muro de Deseos de forma 100%
+              anónima.</small>
           </div>
 
           <!-- Botón de Envío Directo Web -->
@@ -830,11 +833,53 @@
           </p>
 
           <div class="success-actions">
+            <!-- Botón directo hacia el Muro de Dedicatorias -->
+            <a href="#wishes-section" class="btn-gold btn-view-wishes" id="btnGoToWishes">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                <path
+                  d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+              </svg>
+              <span>Ver Muro de Dedicatorias</span>
+            </a>
+
             <!-- Opción para modificar o corregir la confirmación -->
             <button type="button" class="btn-text-modify" id="btnModifyRSVP">
               Editar o cambiar mi respuesta
             </button>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN 8: MURO DE DEDICATORIAS / LIBRO DE DESEOS ANÓNIMOS -->
+    <section class="section wishes-section reveal-on-scroll" id="wishes-section">
+      <span class="section-tag">BUENOS DESEOS</span>
+      <h2 class="section-title">Muro de Dedicatorias</h2>
+      <p class="section-subtitle">
+        Mensajes de amor y bendiciones compartidos por nuestros invitados
+      </p>
+
+      <div class="wishes-card glass-panel has-shimmer">
+        <img src="assets/images/floral-corner-tr.webp" class="card-flower-tr" alt="" aria-hidden="true">
+
+        <div class="wishes-header-badge">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+            <path
+              d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+          </svg>
+          <span id="wishesCountText">Dedicatorias con Amor</span>
+        </div>
+
+        <!-- Contenedor dinámico de dedicatorias anónimas -->
+        <div class="wishes-wall-grid" id="wishesWallGrid">
+          <!-- Renderizado dinámico en main.js -->
+        </div>
+
+        <div class="wishes-privacy-banner">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+          </svg>
+          <span>Todos los mensajes se publican de forma anónima para compartir amor y bendición.</span>
         </div>
       </div>
     </section>
@@ -866,6 +911,11 @@
           <span>Inicio</span>
         </button>
       </div>
+
+      <!-- Crédito de Desarrollo -->
+      <div class="developer-credit">
+        <p>Desarrollado con mucho cariño por <strong>Ariel Marcelo Martínez Zurita</strong></p>
+      </div>
     </footer>
 
   </main>
@@ -881,7 +931,7 @@
   </div>
 
   <!-- JavaScript Modular -->
-  <script src="js/main.js?v=10" charset="UTF-8"></script>
+  <script src="js/main.js?v=15" charset="UTF-8"></script>
 </body>
 
 </html>
