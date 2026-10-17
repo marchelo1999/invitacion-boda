@@ -456,11 +456,38 @@ function escapeHtml(str) {
     .replace(/'/g, '&#039;');
 }
 
+function parseWishDate(raw) {
+  if (!raw || raw === 'Reciente') return Date.now();
+  // Formato dd/MM/yyyy HH:mm o dd/MM/yyyy, HH:mm
+  const dmyMatch = String(raw).match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})(?:[,\s]+(\d{1,2}):(\d{1,2}))?/);
+  if (dmyMatch) {
+    const day = parseInt(dmyMatch[1], 10);
+    const month = parseInt(dmyMatch[2], 10) - 1;
+    const year = parseInt(dmyMatch[3], 10);
+    const hour = dmyMatch[4] ? parseInt(dmyMatch[4], 10) : 0;
+    const min = dmyMatch[5] ? parseInt(dmyMatch[5], 10) : 0;
+    return new Date(year, month, day, hour, min).getTime();
+  }
+  const d = new Date(raw);
+  if (!isNaN(d.getTime())) {
+    return d.getTime();
+  }
+  return 0;
+}
+
 function formatWishDate(raw) {
   if (!raw || raw === 'Reciente' || raw === 'Bendición' || raw === 'Buenos Deseos' || raw === 'Con Cariño') {
     return raw || 'Reciente';
   }
   try {
+    const dmyMatch = String(raw).match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+    if (dmyMatch) {
+      const day = parseInt(dmyMatch[1], 10);
+      const month = parseInt(dmyMatch[2], 10) - 1;
+      const year = parseInt(dmyMatch[3], 10);
+      const d = new Date(year, month, day);
+      return d.toLocaleDateString('es-BO', { day: '2-digit', month: 'short' });
+    }
     const d = new Date(raw);
     if (!isNaN(d.getTime())) {
       return d.toLocaleDateString('es-BO', { day: '2-digit', month: 'short' });
@@ -567,9 +594,19 @@ function addWishToWall(message, authorName = 'Con cariño', timestamp = 'Recient
   if (grid) {
     const emptyState = grid.querySelector('.wishes-empty-state');
     if (emptyState) emptyState.remove();
+    let track = document.getElementById('wishesTrack');
+    if (!track) {
+      grid.innerHTML = `<div class="wishes-track" id="wishesTrack"></div>`;
+      track = document.getElementById('wishesTrack');
+    }
     const cardHtml = renderWishCard(newWish, true);
-    grid.insertAdjacentHTML('afterbegin', cardHtml);
+    track.insertAdjacentHTML('afterbegin', cardHtml);
     updateWishesCountUI(globalWishesList.length);
+    wishesCurrentY = 0;
+    track.style.transform = 'translate3d(0, 0px, 0)';
+    if (typeof initWishesAutoScroll === 'function') {
+      initWishesAutoScroll();
+    }
   }
 }
 
@@ -628,9 +665,27 @@ async function initWishesWall() {
     // Si la API no está disponible, continúa con el resto
   }
 
+  // Ordenar dedicatorias: los últimos/más recientes al inicio (arriba), y los primeros abajo
+  allWishes.sort((a, b) => {
+    // 1. Si ambos provienen de Google Sheets con ID de fila (ej: sheet-21 vs sheet-1), la fila mayor es más reciente
+    const matchA = String(a.id || '').match(/sheet-(\d+)/);
+    const matchB = String(b.id || '').match(/sheet-(\d+)/);
+    if (matchA && matchB) {
+      return parseInt(matchB[1], 10) - parseInt(matchA[1], 10);
+    }
+    // 2. Si uno es recién enviado por el usuario ('user-...'), va arriba
+    if (String(a.id || '').startsWith('user-') && !String(b.id || '').startsWith('user-')) return -1;
+    if (!String(a.id || '').startsWith('user-') && String(b.id || '').startsWith('user-')) return 1;
+
+    // 3. Comparar por fecha y hora cronológica (más reciente primero)
+    return parseWishDate(b.timestamp) - parseWishDate(a.timestamp);
+  });
+
   globalWishesList = allWishes;
   if (allWishes.length) {
-    grid.innerHTML = allWishes.map(w => renderWishCard(w)).join('');
+    grid.innerHTML = `<div class="wishes-track" id="wishesTrack">${allWishes.map(w => renderWishCard(w)).join('')}</div>`;
+    // Activar auto-scroll suave a 60fps/120fps garantizado
+    initWishesAutoScroll();
   } else {
     grid.innerHTML = `
       <div class="wishes-empty-state">
@@ -639,6 +694,247 @@ async function initWishesWall() {
     `;
   }
   updateWishesCountUI(allWishes.length);
+}
+
+/* ==========================================================================
+   MÓDULO 6.6: AUTO-SCROLL ULTRA FLUIDO 60HZ/120HZ (ACELERACIÓN POR HARDWARE GPU)
+   ========================================================================== */
+let wishesAutoScrollActive = false;
+let wishesAutoScrollLoopId = null;
+let wishesCurrentY = 0;
+
+function initWishesAutoScroll() {
+  const container = document.getElementById('wishesWallGrid');
+  const section = document.getElementById('wishes-section');
+  const track = document.getElementById('wishesTrack');
+  if (!container || !section || !track) return;
+
+  if (wishesAutoScrollActive) return;
+  wishesAutoScrollActive = true;
+
+  let isUserInteracting = false;
+  let isSectionVisible = false;
+  let isResetting = false;
+  let resumeTimer = null;
+  let lastTime = 0;
+  const speed = 26; // 26 píxeles por segundo (velocidad serena, lectura perfecta a 60Hz+)
+
+  let touchStartY = 0;
+  let touchInitialY = 0;
+  let isTouching = false;
+  let lastTouchY = 0;
+  let lastTouchTime = 0;
+  let touchVelocity = 0;
+  let momentumFrameId = null;
+
+  function getMaxScroll() {
+    const curTrack = document.getElementById('wishesTrack');
+    if (!curTrack || !container) return 0;
+    return Math.max(0, curTrack.scrollHeight - container.clientHeight);
+  }
+
+  function pauseAutoScroll(resumeDelay = 4000) {
+    isUserInteracting = true;
+    if (resumeTimer) clearTimeout(resumeTimer);
+    if (resumeDelay > 0) {
+      resumeTimer = setTimeout(() => {
+        isUserInteracting = false;
+        lastTime = performance.now();
+      }, resumeDelay);
+    }
+  }
+
+  function stopMomentum() {
+    if (momentumFrameId) {
+      cancelAnimationFrame(momentumFrameId);
+      momentumFrameId = null;
+    }
+  }
+
+  function step(now) {
+    if (!lastTime) lastTime = now;
+    const dt = Math.min((now - lastTime) / 1000, 0.1);
+    lastTime = now;
+
+    const maxScroll = getMaxScroll();
+    const curTrack = document.getElementById('wishesTrack');
+
+    if (!isUserInteracting && !isResetting && isSectionVisible && maxScroll > 20) {
+      wishesCurrentY += speed * dt;
+
+      if (wishesCurrentY >= maxScroll) {
+        wishesCurrentY = maxScroll;
+        if (curTrack) curTrack.style.transform = `translate3d(0, -${wishesCurrentY.toFixed(2)}px, 0)`;
+        isResetting = true;
+        setTimeout(() => {
+          if (curTrack) {
+            curTrack.classList.add('is-resetting');
+            curTrack.style.transform = 'translate3d(0, 0px, 0)';
+          }
+          setTimeout(() => {
+            if (curTrack) curTrack.classList.remove('is-resetting');
+            wishesCurrentY = 0;
+            isResetting = false;
+            lastTime = performance.now();
+          }, 1300);
+        }, 2500);
+      } else if (curTrack) {
+        curTrack.style.transform = `translate3d(0, -${wishesCurrentY.toFixed(2)}px, 0)`;
+      }
+    }
+
+    wishesAutoScrollLoopId = requestAnimationFrame(step);
+  }
+
+  // Interacción táctil fluida para celulares (subir/bajar con el dedo con respuesta 60fps e inercia)
+  container.addEventListener('touchstart', (e) => {
+    if (isResetting || !e.touches || !e.touches[0]) return;
+    stopMomentum();
+    isTouching = true;
+    touchStartY = e.touches[0].clientY;
+    lastTouchY = touchStartY;
+    lastTouchTime = performance.now();
+    touchInitialY = wishesCurrentY;
+    touchVelocity = 0;
+    pauseAutoScroll(0);
+  }, { passive: true });
+
+  container.addEventListener('touchmove', (e) => {
+    if (!isTouching || !e.touches || !e.touches[0]) return;
+    const currentY = e.touches[0].clientY;
+    const now = performance.now();
+    const dt = now - lastTouchTime;
+    if (dt > 8) {
+      touchVelocity = (lastTouchY - currentY) / dt;
+      lastTouchY = currentY;
+      lastTouchTime = now;
+    }
+
+    const delta = currentY - touchStartY;
+    const maxScroll = getMaxScroll();
+    wishesCurrentY = Math.max(0, Math.min(maxScroll, touchInitialY - delta));
+    const curTrack = document.getElementById('wishesTrack');
+    if (curTrack) {
+      curTrack.style.transform = `translate3d(0, -${wishesCurrentY.toFixed(2)}px, 0)`;
+    }
+    pauseAutoScroll(0);
+  }, { passive: true });
+
+  container.addEventListener('touchend', () => {
+    if (!isTouching) return;
+    isTouching = false;
+
+    // Deslizamiento con inercia suave (flick) si soltó en movimiento
+    if (Math.abs(touchVelocity) > 0.12) {
+      let vel = touchVelocity * 15;
+      const applyMomentum = () => {
+        vel *= 0.92;
+        if (Math.abs(vel) < 0.25) {
+          stopMomentum();
+          pauseAutoScroll(4000);
+          return;
+        }
+        const maxScroll = getMaxScroll();
+        wishesCurrentY = Math.max(0, Math.min(maxScroll, wishesCurrentY + vel));
+        const curTrack = document.getElementById('wishesTrack');
+        if (curTrack) {
+          curTrack.style.transform = `translate3d(0, -${wishesCurrentY.toFixed(2)}px, 0)`;
+        }
+        if (wishesCurrentY <= 0 || wishesCurrentY >= maxScroll) {
+          stopMomentum();
+          pauseAutoScroll(4000);
+          return;
+        }
+        momentumFrameId = requestAnimationFrame(applyMomentum);
+      };
+      momentumFrameId = requestAnimationFrame(applyMomentum);
+    } else {
+      pauseAutoScroll(4000);
+    }
+  }, { passive: true });
+
+  container.addEventListener('touchcancel', () => {
+    isTouching = false;
+    stopMomentum();
+    pauseAutoScroll(4000);
+  }, { passive: true });
+
+  // Soporte de arrastre con mouse para PC (Click & Drag estilo app nativa)
+  let isMouseDragging = false;
+  let mouseStartY = 0;
+  let mouseInitialY = 0;
+
+  container.addEventListener('mousedown', (e) => {
+    if (isResetting || e.button !== 0) return;
+    stopMomentum();
+    isMouseDragging = true;
+    mouseStartY = e.clientY;
+    mouseInitialY = wishesCurrentY;
+    container.style.cursor = 'grabbing';
+    pauseAutoScroll(0);
+  });
+
+  window.addEventListener('mousemove', (e) => {
+    if (!isMouseDragging) return;
+    const delta = e.clientY - mouseStartY;
+    const maxScroll = getMaxScroll();
+    wishesCurrentY = Math.max(0, Math.min(maxScroll, mouseInitialY - delta));
+    const curTrack = document.getElementById('wishesTrack');
+    if (curTrack) {
+      curTrack.style.transform = `translate3d(0, -${wishesCurrentY.toFixed(2)}px, 0)`;
+    }
+    pauseAutoScroll(0);
+  });
+
+  window.addEventListener('mouseup', () => {
+    if (!isMouseDragging) return;
+    isMouseDragging = false;
+    container.style.cursor = 'grab';
+    pauseAutoScroll(4000);
+  });
+
+  // Rueda de mouse / trackpad
+  container.addEventListener('wheel', (e) => {
+    if (isResetting) return;
+    e.preventDefault();
+    stopMomentum();
+    const maxScroll = getMaxScroll();
+    wishesCurrentY = Math.max(0, Math.min(maxScroll, wishesCurrentY + e.deltaY));
+    const curTrack = document.getElementById('wishesTrack');
+    if (curTrack) {
+      curTrack.style.transform = `translate3d(0, -${wishesCurrentY.toFixed(2)}px, 0)`;
+    }
+    pauseAutoScroll(3500);
+  }, { passive: false });
+
+  // Mouse hover en PC: pausa al pasar el cursor
+  container.addEventListener('mouseenter', () => pauseAutoScroll(0));
+  container.addEventListener('mouseleave', () => {
+    if (!isTouching && !isMouseDragging) {
+      isUserInteracting = false;
+      lastTime = performance.now();
+    }
+  });
+
+  // Pausa inmediata al hacer clic o tap en una dedicatoria
+  container.addEventListener('click', () => pauseAutoScroll(4500));
+
+  // IntersectionObserver: solo corre si la sección está en la pantalla del usuario (ahorra batería)
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        isSectionVisible = entry.isIntersecting;
+        if (isSectionVisible) {
+          lastTime = performance.now();
+        }
+      });
+    }, { threshold: 0.1 });
+    observer.observe(section);
+  } else {
+    isSectionVisible = true;
+  }
+
+  wishesAutoScrollLoopId = requestAnimationFrame(step);
 }
 
 /* ==========================================================================

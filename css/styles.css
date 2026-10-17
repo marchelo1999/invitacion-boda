@@ -2821,14 +2821,47 @@ h4 {
 }
 
 .wishes-wall-grid {
+  position: relative;
+  max-height: 480px;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+  padding: 0.35rem 0.2rem;
+  touch-action: none; /* Permite arrastrar las cartas en móvil sin que el navegador cancele el toque */
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: grab;
+  /* Desvanecimiento sutil arriba y abajo para transiciones fluidas */
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 5%, black 95%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, black 5%, black 95%, transparent 100%);
+}
+
+.wishes-wall-grid:active {
+  cursor: grabbing;
+}
+
+.wishes-track {
   display: flex;
   flex-direction: column;
   gap: 1.1rem;
-  max-height: 480px;
-  overflow-y: auto;
-  padding-right: 0.3rem;
-  margin-bottom: 1.5rem;
-  scroll-behavior: smooth;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  transition: transform 0s linear;
+}
+
+.wishes-track.is-resetting {
+  transition: transform 1.2s cubic-bezier(0.25, 1, 0.5, 1) !important;
+}
+
+.wishes-autoscroll-hint {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  font-size: 0.72rem;
+  color: var(--blue-muted);
+  margin-bottom: 1rem;
+  opacity: 0.9;
+  letter-spacing: 0.02em;
 }
 
 /* Scrollbar estilizado y elegante para el muro de deseos */
@@ -3482,5 +3515,9 @@ h4 {
   .reserved-highlight {
     font-size: 0.68rem;
     padding: 2px 4px;
+  }
+
+  .wishes-wall-grid {
+    max-height: 400px;
   }
 }
