@@ -2936,10 +2936,15 @@ h4 {
   font-weight: 600;
   color: var(--blue-deep);
   letter-spacing: 0.02em;
+  max-width: 75%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .wish-meta-author svg {
   color: #B85D43;
+  flex-shrink: 0;
 }
 
 .wish-meta-time {

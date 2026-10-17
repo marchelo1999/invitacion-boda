@@ -327,13 +327,14 @@ function initRSVPForm() {
       successCard.style.display = 'flex';
       let wishMsgHtml = '';
       if (data.customMessage) {
-        wishMsgHtml = `<br><span class="success-wish-note">💌 Tu dedicatoria se publicó de forma anónima en el <strong>Muro de Deseos</strong> de abajo.</span>`;
+        wishMsgHtml = `<br><span class="success-wish-note">💌 Tu dedicatoria ya está visible en el <strong>Muro de Dedicatorias</strong> de abajo.</span>`;
       }
+      const displayName = typeof formatGuestName === 'function' ? formatGuestName(data.name) : data.name;
       if (data.willAttend) {
-        successTitle.textContent = `¡Muchas gracias, ${data.name}! ✨`;
-        successDesc.innerHTML = `Tu confirmación para <strong>${data.passes} ${data.passes === 1 ? 'persona' : 'personas'}</strong> ha sido registrada con éxito en la lista oficial de los novios.<br>¡Nos vemos este <strong>24 de Octubre de 2026</strong> para celebrar juntos!${wishMsgHtml}`;
+        successTitle.textContent = `¡Muchas gracias, ${displayName}! ✨`;
+        successDesc.innerHTML = `Tu confirmación para <strong>${data.passes} ${data.passes === 1 ? 'persona' : 'personas'}</strong> ha sido registrada con éxito en la lista oficial de los novios.<br>¡Te esperamos el <strong>sábado 24 de Octubre para el gran día</strong>, y el <strong>domingo 25 para seguir festejando juntos</strong>!${wishMsgHtml}`;
       } else {
-        successTitle.textContent = `Gracias por avisarnos, ${data.name}`;
+        successTitle.textContent = `Gracias por avisarnos, ${displayName}`;
         successDesc.innerHTML = `Lamentamos mucho que no puedas acompañarnos físicamente, pero sabemos que estarás presente en corazón y oraciones. ¡Te mandamos un gran abrazo!${wishMsgHtml}`;
       }
     }
@@ -418,10 +419,10 @@ function initRSVPForm() {
       }
     }
 
-    // Si el invitado escribió una dedicatoria, agregarla al Muro de Deseos anónimamente
+    // Si el invitado escribió una dedicatoria, agregarla al Muro de Dedicatorias con su nombre
     if (customMessage) {
       if (typeof addWishToWall === 'function') {
-        addWishToWall(customMessage, 'Reciente');
+        addWishToWall(customMessage, name, 'Reciente');
       }
     }
 
@@ -441,7 +442,7 @@ function initRSVPForm() {
 }
 
 /* ==========================================================================
-   MÓDULO 6.5: MURO DE DEDICATORIAS / LIBRO DE DESEOS ANÓNIMOS
+   MÓDULO 6.5: MURO DE DEDICATORIAS / LIBRO DE BUENOS DESEOS
    ========================================================================== */
 let globalWishesList = [];
 
@@ -468,19 +469,66 @@ function formatWishDate(raw) {
   return raw;
 }
 
+function formatGuestName(rawName) {
+  if (!rawName) return 'Con cariño';
+  const str = rawName.trim();
+  if (!str || str.toLowerCase() === 'deseo anónimo' || str.toLowerCase() === 'anónimo' || str.toLowerCase() === 'deseo anónimo con cariño' || str.toLowerCase() === 'sin dedicatoria') {
+    return 'Con cariño';
+  }
+
+  // Separar en palabras ignorando espacios múltiples
+  const words = str.split(/\s+/).filter(Boolean);
+  if (!words.length) return 'Con cariño';
+
+  // Capitalizar cada palabra (Primera letra mayúscula, resto en minúscula)
+  const capitalize = (w) => {
+    if (!w) return '';
+    return w.charAt(0).toUpperCase() + w.slice(1).toLowerCase();
+  };
+
+  const capWords = words.map(capitalize);
+
+  // Caso especial: "Familia Gómez Pérez" -> "Familia Gómez"
+  if (capWords[0].toLowerCase() === 'familia') {
+    return capWords.length >= 2 ? `${capWords[0]} ${capWords[1]}` : capWords[0];
+  }
+
+  // 1 palabra: ej. "Carlos" -> "Carlos"
+  if (capWords.length === 1) {
+    return capWords[0];
+  }
+
+  // 2 palabras: ej. "Karen Jordan" -> "Karen Jordan"
+  if (capWords.length === 2) {
+    return `${capWords[0]} ${capWords[1]}`;
+  }
+
+  // 3 palabras: ej. "Karen Jorda Coaquira" -> "Karen Jorda" (Nombre + 1er Apellido)
+  if (capWords.length === 3) {
+    return `${capWords[0]} ${capWords[1]}`;
+  }
+
+  // 4 o más palabras: ej. "Maria Rene Martinez Zurita" -> "Maria Rene Martinez" (2 Nombres + 1er Apellido)
+  return `${capWords[0]} ${capWords[1]} ${capWords[2]}`;
+}
+
 function renderWishCard(wish, isNew = false) {
   const safeMsg = escapeHtml(wish.message);
+  
+  // Nombre del invitado formateado elegantemente (Title Case, sin mayúsculas gritadas ni apellidos extras)
+  const safeAuthor = escapeHtml(formatGuestName(wish.name || wish.author));
   const safeTime = escapeHtml(formatWishDate(wish.timestamp));
+
   return `
     <article class="wish-item-card ${isNew ? 'is-new-wish' : ''}">
       <div class="wish-card-quote-mark" aria-hidden="true">“</div>
       <p class="wish-card-message">${safeMsg}</p>
       <div class="wish-card-meta">
-        <span class="wish-meta-author">
+        <span class="wish-meta-author" title="${safeAuthor}">
           <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
             <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
           </svg>
-          Deseo anónimo con cariño
+          ${safeAuthor}
         </span>
         <span class="wish-meta-time">${safeTime}</span>
       </div>
@@ -495,13 +543,15 @@ function updateWishesCountUI(count) {
   }
 }
 
-function addWishToWall(message, timestamp = 'Reciente') {
+function addWishToWall(message, authorName = 'Con cariño', timestamp = 'Reciente') {
   if (!message || !message.trim()) return;
   const cleanMsg = message.trim();
+  const cleanName = formatGuestName(authorName);
   const grid = document.getElementById('wishesWallGrid');
 
   const newWish = {
     id: 'user-' + Date.now(),
+    name: cleanName,
     message: cleanMsg,
     timestamp: timestamp
   };
